@@ -238,6 +238,8 @@ public:
 		{
 			bucket[i].clear();
 		}
+
+		numElements = 0;
 	}
 
 	// Debug ------------------------------------------------------------------
@@ -255,32 +257,26 @@ public:
 		cout << endl;
 	}
 
-	// DO NOT USE THE TWO DISPLAY FUNCTIONS LISTED BELOW!
-
-	// Displays the contents of the hash table by head key
-	void DiplayByKey()
+	// Displays all of the elements of the hash table on their own line (use for adjacency-list representation)
+	void DisplayElementList()
 	{
-		cout << "Displaying by key:  " << endl;
-		for (int i = 0; i < arraySize; i++)
+		if (numElements > 0) // How to get all of the vertices in the hash table...
 		{
-			ChainNode<Key, Value>* ptr = bucket[i].GetHead();
-
-			if (ptr != nullptr)
+			for (int i = 0; i < arraySize; i++)
 			{
-				Key dataKey = ptr->dataKey;
+				ChainNode<Key, Value>* ptr = bucket[i].GetHead();
 
-				int hashVal = GetHashValue(dataKey, arraySize);
-
-				cout << "Bucket[" << hashVal << "]:\t";
-				bucket[hashVal].printLst();
-			}
-			else
-			{
-				cout << "EMPTY BUCKET" << endl;
+				if (ptr != nullptr)
+					cout << ptr->data << endl;
 			}
 		}
+		else
+			cout << "The table is empty." << endl;
+
 		cout << endl;
 	}
+
+	// DO NOT USE THE DISPLAY FUNCTION LISTED BELOW!
 
 	// Displays statistics
 	void DisplayDebugInfo() const
