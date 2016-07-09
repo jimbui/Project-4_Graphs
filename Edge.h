@@ -1,27 +1,44 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-#include "Vertex.h"
+// In order to determine the vertex the edge is storing, get the vertex and then 
+// use the hash table to determine the remainder of the edges:
+// Vertex<T>* v = hashBrown->search(key); --> this will always be the origin
+// Vertex<T>* prev = v;
+// In for-loop:
+//		Edge<T>* e = currentVertex->adjacencyList->find(i);
+// hashBrown->search(currentVertex->adjacencyList->find(i)->destinationName) will get the next vertex.
 
-template<class T> class Edge
+class Edge
 {
 private:
 	double weight;
 
-	Vertex<T>* origin;
-	Vertex<T>* destination;
+	string originName;
+	string destinationName;
 
-	// template<class U> friend class Vertex;
+	template<class U> friend class Vertex;
+	template<class U> friend class Graph;
 
 public:
-	Edge(double weight, Vertex<T>* origin, Vertex<T>* destination)
+	Edge(double weight, string originName, string destinationName)
 	{
 		this->weight = weight;
-		this->origin = origin;
-		this->destination = destination;
+		this->originName = originName;
+		this->destinationName = destinationName;
 	}
 
 	double GetWeight() const { return weight; };
+
+	string GetOrigin() const { return originName; };
+
+	string GetDestination() const { return destinationName; };
+
+	// Checks to see whether two edges are equal based on an undirected representation of a graph
+	bool isUndirectedEqual(const Edge& other)
+	{
+		return (weight == other.weight && originName == other.destinationName && destinationName == other.originName);
+	}
 
 	~Edge() {}
 };

@@ -14,6 +14,9 @@ protected:
 	Node<T> * head;
 	int sz;
 
+	template<class U> friend class Graph;
+	template<class U> friend class Vertex;
+
 protected:
 	SLinkedList() :sz(0), head(nullptr) {}
 
@@ -129,7 +132,11 @@ protected:
 				sz--;
 			}
 		}
+
+		if (sz == 0)
+			head = nullptr;
 	}
+
 	void printList() const
 	{
 		Node<T> *ptr = head;
@@ -143,5 +150,24 @@ protected:
 		cout << "end" << endl;
 	}
 
+	void clear()
+	{
+		Node<T> *ptr = head;
+		Node<T> *prev = head;
+
+		while (ptr != nullptr)
+		{
+			ptr = ptr->next;
+			delete prev;
+			prev = ptr;
+		}
+
+		head = nullptr;
+	}
+
+	/*friend ostream& operator<<(ostream& os, const SLinkedList<T>& ls)
+	{
+
+	}*/
 };
 #endif

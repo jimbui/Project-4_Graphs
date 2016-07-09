@@ -22,6 +22,11 @@ public:
 	ChainNode() :data(0), next(0), dataKey(0)
 	{}
 
+	~ChainNode()
+	{
+		delete data;
+	}
+
 	ChainNode(const Value& data, const Key& dataKey) :next(0)
 	{
 		this->data = data;
@@ -34,6 +39,12 @@ public:
 		this->dataKey = dataKey;
 		this->next = next;
 	}
+
+	ChainNode* GetNext() { return next; };
+
+	Value Data() const { return data; };
+
+	Key DataKey() const { return dataKey; };
 
 	// Include operator overloading in final project.
 	friend ostream& operator<<(ostream& os, const ChainNode<Key, Value>& n)

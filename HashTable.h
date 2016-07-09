@@ -9,6 +9,8 @@
 
 template<class Key, class Value> class HashTable
 {
+	template<class U> friend class Graph;
+
 private:
 	// Contains the total number of values in the entire hash table
 	int numElements;
@@ -109,6 +111,7 @@ public:
 
 		if (ptr == nullptr)
 			throw underflow_error("The bucket is empty; no value was returned.");
+
 		else
 		{
 			// Searches the list until the item is found. O(1) is the optimal circumstance.  The worst-case

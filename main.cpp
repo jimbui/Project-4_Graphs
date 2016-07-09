@@ -9,20 +9,99 @@ int main()
 	// Method --> Reset sets each vertex object flag to false.
 	// Vertex contains linked list of edges... (edge->start = vertex)
 
+	Edge e1(10, "Duh", "Barf");
+	Edge e2(10, "Barf", "Duh");
+
+	bool areEdgesEqual = e1.isUndirectedEqual(e2);
+
 	Graph<double>* calculator = new Graph<double>(23);
 
-	HashTable<string, int>* hashBrown = new HashTable<string, int>(29, 0.5);
+	calculator->DisplayAdjacencyList();
 
-	hashBrown->insert("V1", 10);
-	hashBrown->insert("V2", 20);
+	try
+	{
+		cout << "Degree of V1:  " << calculator->degree("V1") << endl;
+	}
+	catch (const invalid_argument& e)
+	{
+		cerr << e.what() << endl;
+	}
 
-	// int val1 = hashBrown["V1"];
+	try
+	{
+		cout << "Edge:  V1 <----> V2 = " << calculator->adjacent("V1", "V2") << endl;
+	}
+	catch (const invalid_argument& e)
+	{
+		cerr << e.what() << endl;
+	}
 
-	hashBrown->DisplayElementList();
+	// Perform multiple insertions/deletions...
+	while (true)
+	{
+		calculator->DisplayAdjacencyList();
 
-	hashBrown->clear();
+		cout << "Use 'd' to delete and 'i' to insert:  ";
+		char deleteOrInsert;
+		cin >> deleteOrInsert;
+		cin.ignore();
 
-	hashBrown->DisplayElementList();
+		if (deleteOrInsert == 'd')
+		{
+			string v;
+
+			cout << "Enter vertex to delete:  ";
+			cin >> v;
+			cin.ignore();
+
+			calculator->del(v);
+		}
+		else if (deleteOrInsert == 'i')
+		{
+			string u, v;
+			double w;
+
+			cout << "Enter Starting Vertex:  ";
+			cin >> u;
+			cin.ignore();
+			cout << "Enter Destination Vertex:  ";
+			cin >> v;
+			cin.ignore();
+			cout << "Enter Desired Weight:  ";
+			cin >> w;
+			cin.ignore();
+
+			cout << endl;
+
+			try
+			{
+				calculator->insert(u, v, w);
+			}
+			catch (const invalid_argument& e)
+			{
+				cerr << e.what() << endl;
+			}
+		}
+		else
+			cout << "Invalid input." << endl;
+
+		cout << endl;
+	}
+
+	delete calculator;
+
+	//HashTable<string, int>* hashBrown = new HashTable<string, int>(29, 0.5);
+
+	//hashBrown->insert("V1", 10);
+	//hashBrown->insert("V2", 20);
+
+	//// int val1 = hashBrown["V1"];
+
+	//hashBrown->DisplayElementList();
+
+	//hashBrown->clear();
+
+	//hashBrown->DisplayElementList();
 
 	cin.get();
 	return 0;

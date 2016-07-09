@@ -2,6 +2,7 @@
 #define VERTEX_H
 
 #include <iostream>
+#include <stdexcept>
 #include "SLinkedList.h"
 #include "Edge.h"
 
@@ -16,7 +17,7 @@ private:
 	bool visited;
 	T data;
 	Vertex<T> * parent;
-	SLinkedList<Edge<T> * > adjacencyList;
+	SLinkedList<Edge*>* adjacencyList;
 
 	// int depth;
 	template<class U> friend class Graph;
@@ -25,8 +26,17 @@ public:
 	Vertex(const T & data) :visited(false), /*depth(0),*/ parent(0)
 	{
 		this->data = data;
-		// id = numID++;
+		adjacencyList = new SLinkedList<Edge*>();
 	}
+
+	~Vertex()
+	{
+		adjacencyList->clear();
+
+		delete adjacencyList;
+	}
+
+	T GetData() const { return data; };
 
 	void visit()
 	{
@@ -41,6 +51,13 @@ public:
 			this->depth = 0;
 		else 
 			this->depth = origin->depth + 1;
+	}
+
+	friend ostream& operator<<(ostream& os, const Vertex& v)
+	{
+		os << v.GetData();
+
+		return os;
 	}
 };
 
