@@ -35,6 +35,11 @@ public:
 		// directions (to either vertex).
 	}
 
+	~DirGraph()
+	{
+		delete vertices;
+	}
+
 	// Accessors --------------------------------------------------------------------------
 	bool empty() const { return sz == 0; };
 
@@ -326,7 +331,7 @@ public:
 					string vName = ptr->DataKey();
 					Vertex<T>* current = ptr->Data();
 
-					cout << "|" << vName << "| --> ";
+					cout << "|" << vName << ":  " << current->GetData() << "| --> ";
 
 					Node<Edge*>* edgePtr = current->adjacencyList->head;
 

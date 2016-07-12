@@ -11,7 +11,9 @@ int main()
 	// Vertex contains linked list of edges... (edge->start = vertex)
 
 	Edge e1(10, "Duh", "Barf");
-	Edge e2(10, "Barf", "Duh");
+	Edge e2(14, "Barf", "Duh");
+
+	bool duhr = e1 < e2;
 
 	bool areEdgesEqual = e1.isUndirectedEqual(e2);
 

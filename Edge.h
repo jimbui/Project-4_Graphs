@@ -41,6 +41,16 @@ public:
 		return (weight == other.weight && originName == other.destinationName && destinationName == other.originName);
 	}
 
+	bool operator>(const Edge& other)
+	{
+		return weight > other.weight;
+	}
+
+	bool operator<(const Edge& other)
+	{
+		return weight < other.weight;
+	}
+
 	~Edge() {}
 };
 

@@ -276,7 +276,7 @@ public:
 					string vName = ptr->DataKey();
 					Vertex<T>* current = ptr->Data();
 
-					cout << "|" << vName << "| --> ";
+					cout << "|" << vName << ":  " << current->GetData() << "| --> ";
 
 					Node<Edge*>* edgePtr = current->adjacencyList->head;
 
