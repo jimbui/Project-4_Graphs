@@ -1,5 +1,6 @@
 #include "HashTable.h"
 #include "Graph.h"
+#include "DirGraph.h"
 
 int main()
 {
@@ -14,13 +15,13 @@ int main()
 
 	bool areEdgesEqual = e1.isUndirectedEqual(e2);
 
-	Graph<double>* calculator = new Graph<double>(23);
+	DirGraph<double>* calculator = new DirGraph<double>(23);
 
 	calculator->DisplayAdjacencyList();
 
 	try
 	{
-		cout << "Degree of V1:  " << calculator->degree("V1") << endl;
+		cout << "In-Degree of V1:  " << calculator->indegree("V1") << endl;
 	}
 	catch (const invalid_argument& e)
 	{

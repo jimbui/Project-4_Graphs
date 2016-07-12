@@ -19,6 +19,7 @@ private:
 
 	template<class U> friend class Vertex;
 	template<class U> friend class Graph;
+	template<class U> friend class DirGraph;
 
 public:
 	Edge(double weight, string originName, string destinationName)

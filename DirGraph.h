@@ -1,5 +1,5 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef DIRGRAPH_H
+#define DIRGRAPH_H
 
 #include <iostream>
 #include "HashTable.h"
@@ -8,7 +8,7 @@
 
 using namespace std;
 
-template<class T> class Graph
+template<class T> class DirGraph
 {
 private:
 	HashTable<string, Vertex<T>*>* vertices;
@@ -16,32 +16,84 @@ private:
 	int edgeCount;
 
 public:
-	Graph(int Sz = 20) :sz(Sz)
+	DirGraph(int Sz = 20) :sz(Sz)
 	{
-		vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
+		vertices = new HashTable<string, Vertex<T>*>();
 
 		// Test code...
 		vertices->insert("V1", new Vertex<T>(44));
 		vertices->insert("V2", new Vertex<T>(90));
 		vertices->insert("V3", new Vertex<T>(46));
 		vertices->insert("V4", new Vertex<T>(79));
-	}
 
-	~Graph()
-	{
-		delete vertices;
+		insert("V2", "V1", 10);
+		insert("V3", "V1", 10);
+		insert("V1", "V3", 20);
+
+		// Note that unlike in the case of an undirected graph,
+		// directed graphs can contain edges not pointing in both
+		// directions (to either vertex).
 	}
 
 	// Accessors --------------------------------------------------------------------------
 	bool empty() const { return sz == 0; };
 
-	// Returns the degree of the vertex stored at v in the hash table.  Can throw errors, so be sure to catch them...
-	int degree(string v)
+	// Returns the out-degree of the vertex stored at v in the hash table.  Can throw errors, so be sure to catch them...  O(1)
+	int outdegree(string v)
 	{
 		try
 		{
 			Vertex<T>* vertest = vertices->search(v);
 			return vertest->adjacencyList->sz;
+		}
+		catch (const underflow_error& e)
+		{
+			throw invalid_argument("Vertex does not exist.");
+		}
+	}
+
+	// O(n^2) because # edges can be n^2 max
+	int indegree(string v)
+	{
+		try
+		{
+			Vertex<T>* vertest = vertices->search(v);  // This line of code will throw an error if execution is unsuccessful.
+			int innDegree = 0;
+
+			// Get the rest of the vertices...
+			for (int i = 0; i < vertices->arraySize; i++)
+			{
+				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
+
+				// If the bucket is empty, nothing happens in this loop.
+				while (ptr != nullptr)
+				{
+					Vertex<T>* current = ptr->Data();
+
+					// Ensure that current != vertex at v
+					if (current != vertest)
+					{
+						Node<Edge*>* edgePtr = current->adjacencyList->head;
+
+						// Check each edge in each vertex
+						while (edgePtr != nullptr)
+						{
+							// If the edge's destination is the vertex being searched, increment in-degree and break.
+							if (edgePtr->data->destinationName == v)
+							{
+								innDegree++;
+								break;
+							}
+
+							edgePtr = edgePtr->next;
+						}
+					}
+
+					ptr = ptr->GetNext();
+				}
+			}
+
+			return innDegree;
 		}
 		catch (const underflow_error& e)
 		{
@@ -65,7 +117,7 @@ public:
 		{
 			// Get vertex u first; then check to see if v is adjacent to u
 			Vertex<T>* uVertex = vertices->search(u);
-			
+
 			// The vertices are the same... (Note that the try-loop will handle all invalid arguments.)
 			if (u == v)
 				return 0;
@@ -76,7 +128,7 @@ public:
 			if (edgeNode == nullptr)
 				return 6.66 * pow(10, 66);
 
-			// Return where the edge node's destination is v. (This is u <----> v.)
+			// Return where the edge node's destination is v. (This is u --> v.)
 			while (edgeNode != nullptr)
 			{
 				if (v == edgeNode->data->GetDestination())
@@ -123,7 +175,7 @@ public:
 			throw invalid_argument("The vertices cannot be equal.");
 
 		// Checks to see whether the weight is valid.
-		if (w < 0 || w > pow(10, 10))
+		if (w <= 0 || w > pow(10, 10))
 			throw invalid_argument("Invalid weight.  Valid values are between 0 and 10 ^ 10 - 1.");
 
 		// Try loop is used to determine whether u and v exist...
@@ -137,18 +189,17 @@ public:
 			Node<Edge*>* listPtrU = uVertex->adjacencyList->head;
 			Node<Edge*>* listPtrV = vVertex->adjacencyList->head;
 
-			if (listPtrU == nullptr && listPtrV == nullptr && w > 0)  // insert the new item because one does not already exist
+			if (listPtrU == nullptr && listPtrV == nullptr)  // insert the new item because one does not already exist
 			{
+				// In a directed graph, only one edge is inserted.
 				Edge* newEdgeUToV = new Edge(w, u, v);
-				Edge* newEdgeVToU = new Edge(w, v, u);
 
 				uVertex->adjacencyList->insert(newEdgeUToV);
-				vVertex->adjacencyList->insert(newEdgeVToU);
 
 				edgeCount++;
 				return;
 			}
-			
+
 			bool foundU = false;
 			// Else, enter this while-loop and see if the edge already exists
 
@@ -158,9 +209,9 @@ public:
 				{
 					foundU = true;
 
-					// Delete link if the weight is equal to 0.
-					if (w == 0)
-						uVertex->adjacencyList->del(listPtrU->data);
+					// Weight cannot equal 0.  This throws an illegal argument exception.
+					/*if (w == 0)
+						uVertex->adjacencyList->del(listPtrU->data);*/
 
 					break;
 				}
@@ -168,32 +219,42 @@ public:
 				listPtrU = listPtrU->next;
 			}
 
-			if (!foundU && w > 0)  // The edge does not exist, so a new one will be inserted.
-			{
-				Edge* newEdgeUToV = new Edge(w, u, v);
-				Edge* newEdgeVToU = new Edge(w, v, u);
+			// The loop commented out below applies only to undirected graphs because existing edges go both directions.
 
-				uVertex->adjacencyList->insert(newEdgeUToV);
-				vVertex->adjacencyList->insert(newEdgeVToU);
+			//if (!foundU && w > 0)  // The edge does not exist, so a new one will be inserted.
+			//{
+			//	Edge* newEdgeUToV = new Edge(w, u, v);
+			//	Edge* newEdgeVToU = new Edge(w, v, u);
 
-				edgeCount++;
-				return;
-			}
+			//	uVertex->adjacencyList->insert(newEdgeUToV);
+			//	vVertex->adjacencyList->insert(newEdgeVToU);
+
+			//	edgeCount++;
+			//	return;
+			//}
 
 			// Else, enter this while-loop and get the other edge.  At this point, the only thing that will be modified is the edge's weight.
 			while (listPtrV != nullptr)
 			{
-				if (listPtrV->data->destinationName == u)
+				if (listPtrV->data->destinationName == u)  // In this case, there is already an existing edge.
 				{
-					if (w > 0)
+					/*if (w > 0)
+					{*/
+					if (!foundU)
 					{
+						Edge* newEdgeUToV = new Edge(w, u, v);
+						uVertex->adjacencyList->insert(newEdgeUToV);
+					}
+					else
 						listPtrU->data->weight = w;
-						listPtrV->data->weight = w;
-					}
-					else  // Simply remove the other connection.
-					{
-						vVertex->adjacencyList->del(listPtrV->data);
-					}
+
+					listPtrV->data->weight = w;
+
+					//}
+					//else  // Simply remove the other connection.
+					//{
+					//	vVertex->adjacencyList->del(listPtrV->data);
+					//}
 
 					return;
 				}
@@ -215,42 +276,39 @@ public:
 		{
 			Vertex<T>* vVertex = vertices->search(v);  // Get the vertex to delete.
 
-			Node<Edge*>* edgeNode = vVertex->adjacencyList->head;  // Gets the head vertex
+			vVertex->adjacencyList->clear();  // Clears the entire adjacency list
 
 			// Note that in a directed graph, one cannot simply traverse the connections and get those vertices' edges.
 			// One must instead traverse all vertices and get all edges pointing to v.  This will correspond to a runtime of
 			// O(n^2).
 
-			// There must be no connecting links.  (Assumption valid for undirected graph only.)
-			if (edgeNode == nullptr)
+			// Finds and deletes every edge in the hash table whose edge's destination = v.
+			for (int i = 0; i < vertices->arraySize; i++)
 			{
-				vertices->erase(v);  // Do not delete a vertex in the graph.  Delete it from the hash table.
-				return;
-			}
+				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-			// Search each connecting vertex for the link corresponding to v, and remove that link.
-			while (edgeNode != nullptr)
-			{
-				// Get the destination vertex of the link...
-				Vertex<T>* destinationVertex = vertices->search(edgeNode->data->destinationName);
-
-				Node<Edge*>* edgeNodeDest = destinationVertex->adjacencyList->head;
-
-				// By the rules of undirected graphs, edgeNodeDest will never be a nullptr.
-				while (edgeNodeDest != nullptr)
+				while (ptr != nullptr)
 				{
-					if (edgeNodeDest->data->destinationName == v)  // Where these two conditions are equal, the edge will be removed.
+					Vertex<T>* current = ptr->Data();
+
+					if (current != vVertex)
 					{
-						// I'm feeling lazy.  Don't tell the instructor... --> Inefficient function.
-						destinationVertex->adjacencyList->del(edgeNodeDest->data);
-						edgeCount--;
-						break;  // There will never be duplicate edges in the same list.
+						Node<Edge*>* edgePtr = current->adjacencyList->head;
+
+						while (edgePtr != nullptr)
+						{
+							if (edgePtr->data->destinationName == v)
+							{
+								current->adjacencyList->del(edgePtr->data);
+								break;
+							}
+
+							edgePtr = edgePtr->next;
+						}
 					}
 
-					edgeNodeDest = edgeNodeDest->next;
+					ptr = ptr->GetNext();
 				}
-
-				edgeNode = edgeNode->next;
 			}
 
 			// Delete vertex out of hash table after all links to it have been removed.
@@ -298,6 +356,5 @@ public:
 		cout << endl;
 	}
 };
-
 
 #endif

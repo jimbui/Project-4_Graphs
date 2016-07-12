@@ -15,6 +15,7 @@ protected:
 	int sz;
 
 	template<class U> friend class Graph;
+	template<class U> friend class DirGraph;
 	template<class U> friend class Vertex;
 
 protected:

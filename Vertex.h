@@ -21,6 +21,7 @@ private:
 
 	// int depth;
 	template<class U> friend class Graph;
+	template<class U> friend class DirGraph;
 
 public:
 	Vertex(const T & data) :visited(false), /*depth(0),*/ parent(0)
