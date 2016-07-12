@@ -124,7 +124,7 @@ public:
 
 		// Checks to see whether the weight is valid.
 		if (w < 0 || w > pow(10, 10))
-			throw invalid_argument("Invalid weight.  Valid values are between 0 and 10 ^ 10 - 1.");
+			throw invalid_argument("Invalid weight.  Valid values are between 0 and 10 ^ 10.");
 
 		// Try loop is used to determine whether u and v exist...
 		try

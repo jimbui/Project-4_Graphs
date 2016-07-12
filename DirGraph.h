@@ -18,7 +18,7 @@ private:
 public:
 	DirGraph(int Sz = 20) :sz(Sz)
 	{
-		vertices = new HashTable<string, Vertex<T>*>();
+		vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
 
 		// Test code...
 		vertices->insert("V1", new Vertex<T>(44));
@@ -149,6 +149,7 @@ public:
 	// Mutators --------------------------------------------------------------------------
 	void clear()  // O(n)
 	{
+		edgeCount = 0;
 		vertices->clear();
 	}
 
@@ -219,27 +220,11 @@ public:
 				listPtrU = listPtrU->next;
 			}
 
-			// The loop commented out below applies only to undirected graphs because existing edges go both directions.
-
-			//if (!foundU && w > 0)  // The edge does not exist, so a new one will be inserted.
-			//{
-			//	Edge* newEdgeUToV = new Edge(w, u, v);
-			//	Edge* newEdgeVToU = new Edge(w, v, u);
-
-			//	uVertex->adjacencyList->insert(newEdgeUToV);
-			//	vVertex->adjacencyList->insert(newEdgeVToU);
-
-			//	edgeCount++;
-			//	return;
-			//}
-
 			// Else, enter this while-loop and get the other edge.  At this point, the only thing that will be modified is the edge's weight.
 			while (listPtrV != nullptr)
 			{
 				if (listPtrV->data->destinationName == u)  // In this case, there is already an existing edge.
 				{
-					/*if (w > 0)
-					{*/
 					if (!foundU)
 					{
 						Edge* newEdgeUToV = new Edge(w, u, v);
@@ -256,11 +241,17 @@ public:
 					//	vVertex->adjacencyList->del(listPtrV->data);
 					//}
 
+					edgeCount++;
 					return;
 				}
 
 				listPtrV = listPtrV->next;
 			}
+
+			// Insertion is okay.
+			edgeCount++;
+			Edge* newEdgeUToV = new Edge(w, u, v);
+			uVertex->adjacencyList->insert(newEdgeUToV);
 		}
 
 		catch (const underflow_error& e)
@@ -312,6 +303,7 @@ public:
 			}
 
 			// Delete vertex out of hash table after all links to it have been removed.
+			edgeCount--;
 			vertices->erase(v);
 		}
 		catch (const underflow_error& e)
