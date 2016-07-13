@@ -6,26 +6,30 @@ int main()
 {
 	cout << "4 tcejorP maeT" << endl << endl;  // Insert new edge is the only algorithm for insertion required.  Hash table can cause collisions.
 
-	//test buildgraph for Directed Graph
-	DirGraph<double>* GraphTest = new DirGraph<double>(23);
-	GraphTest->buildGraph();
-	GraphTest->DisplayAdjacencyList();
-
-	//test buildgraph for UnDirected Graph
-	Graph<double>* UnGraphTest = new Graph<double>(23);
-	UnGraphTest->buildGraph();
-	UnGraphTest->DisplayAdjacencyList();
-
 	// Get name --> vertex
 	// Method --> Reset sets each vertex object flag to false.
 	// Vertex contains linked list of edges... (edge->start = vertex)
 
-	/*Edge e1(10, "Duh", "Barf");
+	Edge e1(10, "Duh", "Barf");
 	Edge e2(14, "Barf", "Duh");
 
 	bool duhr = e1 < e2;
 
 	bool areEdgesEqual = e1.isUndirectedEqual(e2);
+
+	Graph<double>* undirectedCalc = new Graph<double>(23);
+
+	// After doing any search, be sure to call reset.
+	try
+	{
+		undirectedCalc->BFS("V1");
+		undirectedCalc->reset();
+		bool duh = undirectedCalc->isConnected();
+	}
+	catch (const invalid_argument& e)
+	{
+		cerr << e.what() << endl;
+	}
 
 	DirGraph<double>* calculator = new DirGraph<double>(23);
 
@@ -47,10 +51,10 @@ int main()
 	catch (const invalid_argument& e)
 	{
 		cerr << e.what() << endl;
-	}*/
+	}
 
 	// Perform multiple insertions/deletions...
-	/*while (true)
+	while (true)
 	{
 		calculator->DisplayAdjacencyList();
 
@@ -101,7 +105,7 @@ int main()
 		cout << endl;
 	}
 
-	delete calculator;*/
+	delete calculator;
 
 	//HashTable<string, int>* hashBrown = new HashTable<string, int>(29, 0.5);
 

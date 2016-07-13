@@ -3,13 +3,9 @@
 
 #include <iostream>
 #include "HashTable.h"
+#include "mQueue.h"
 #include "Vertex.h"
 #include "Edge.h"
-#include <fstream>
-#include <string>
-#include <stdexcept>
-#include <sstream>
-#include <map>
 
 using namespace std;
 
@@ -26,67 +22,21 @@ public:
 		vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
 
 		// Test code...
-		/*vertices->insert("V1", new Vertex<T>(44));
+		vertices->insert("V1", new Vertex<T>(44));
 		vertices->insert("V2", new Vertex<T>(90));
 		vertices->insert("V3", new Vertex<T>(46));
-		vertices->insert("V4", new Vertex<T>(79));*/
+		vertices->insert("V4", new Vertex<T>(79));
+
+		insert("V1", "V3", 10);
+		insert("V1", "V4", 10);
+		// insert("V4", "V2", 10);
+		// insert("V2", "V3", 10);
 	}
 
 	~Graph()
 	{
 		delete vertices;
 	}
-
-	void buildGraph(){
-        string line;
-        ifstream myfile ("UnDirGraph.txt");
-        if (myfile.is_open())
-        {
-            // Building array of vertices
-            while(getline(myfile,line)){
-                
-				string str(line);
-				string vname(str.substr(0, str.find_first_of(' ')));
-
-				//cout << "vname: " << vname << endl;
-
-				str = str.substr(str.find_first_of(' ') + 1, str.length());
-				string data(str.substr(0, str.find_first_of(' ')));
-
-				//cout << "vname data: " << data << endl;
-
-				//vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
-				vertices->insert(vname, new Vertex<T>(stoi(data)));
-            }
-
-			myfile.clear();
-            myfile.seekg(0, ios::beg);
-
-            while(getline(myfile,line)){
-
-				string str(line);
-				string vnamefore(str.substr(0, str.find_first_of(' ')));
-				int StartPos = str.find_first_of('!');
-				string linein(str.substr(StartPos+1, ' '));
-                
-				mQueue<string> Q;
-				stringstream ss(linein);
-				string linedata;
-				while (getline(ss, linedata, ' ')) {
-					Q.enqueue(linedata);
-				}
-                while (!Q.isEmpty()){
-                    string ename = Q.dequeue();
-					string weight = Q.dequeue();
-					
-					insert(vnamefore, ename, stoi(weight));
-				}
-			}
-
-            myfile.close();
-        }
-        else cout << "Unable to open file";
-    }
 
 	// Accessors --------------------------------------------------------------------------
 	bool empty() const { return sz == 0; };
@@ -105,10 +55,70 @@ public:
 		}
 	}
 
-	// Program this later... --> probably O(n^2).
+	// Checks to see if the graph is connected by performing a BFS on 1 vertex and ensuring that all vertices are visited afterward.  O(n^2).
+	// Note that this function automatically resets the graph, but BFS and DFS don't.
 	bool isConnected()
 	{
-		return false;
+		if (sz > 0)
+		{
+			int numVerticesVisited = 0;
+			Vertex<T>* start;
+
+			// Get the starting vertex
+			for (int i = 0; i < vertices->arraySize; i++)
+			{
+				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
+
+				bool breakThis = false;
+
+				while (ptr != nullptr)
+				{
+					start = ptr->Data();
+					breakThis = true;
+					break;
+				}
+
+				if (breakThis)
+					break;
+			}
+
+			
+			// cout << v << ":  " << start->data << endl;
+			start->visited = true;
+			numVerticesVisited++;
+
+			mQueue<Vertex<T>*> Q;
+			Q.enqueue(start);
+
+			while (!Q.isEmpty())
+			{
+				Vertex<T>* vVertex = Q.dequeue();
+
+				Node<Edge*>* edgePtr = vVertex->adjacencyList->head;
+
+				while (edgePtr != nullptr)
+				{
+					string w = edgePtr->data->destinationName;
+					Vertex<T>* wVertex = vertices->search(w);
+
+					if (!wVertex->visited)
+					{
+						// cout << w << ":  " << wVertex->data << endl;
+						wVertex->visited = true;
+						numVerticesVisited++;
+
+						Q.enqueue(wVertex);
+					}
+
+					edgePtr = edgePtr->next;
+				}
+			}
+
+			reset();
+			return (numVerticesVisited == vertices->numElements);
+		}
+		else
+			return false;  // Should probably throw an error.
 	}
 
 	// Returns the number of edges in the graph
@@ -150,6 +160,77 @@ public:
 		}
 	}
 
+	// Performs depth-first search on vertex v.  
+	void DFS(string v)
+	{
+		try
+		{
+			Vertex<T>* current = vertices->search(v);
+			cout << v << ":  " << current->data << endl;
+			current->visited = true;
+
+			Node<Edge*>* edgePtr = current->adjacencyList->head;
+
+			while (edgePtr != nullptr)
+			{
+				string w = edgePtr->data->destinationName;
+				
+				// The next vertex will always exist as long as insertion/deletion was done properly.
+				Vertex<T>* nextVertex = vertices->search(w);
+
+				if (!nextVertex->visited)
+					DFS(w);
+
+				edgePtr = edgePtr->next;
+			}
+		}
+		catch (const underflow_error& e)
+		{
+			throw invalid_argument("Vertex does not exist.  Have a nice day.");
+		}
+	}
+
+	// Performs a breadth-first search on vertex v.
+	void BFS(string v)
+	{
+		try
+		{
+			Vertex<T>* start = vertices->search(v);
+			cout << v << ":  " << start->data << endl;
+			start->visited = true;
+
+			mQueue<Vertex<T>*> Q;
+			Q.enqueue(start);
+
+			while (!Q.isEmpty())
+			{
+				Vertex<T>* vVertex = Q.dequeue();
+
+				Node<Edge*>* edgePtr = vVertex->adjacencyList->head;
+
+				while (edgePtr != nullptr)
+				{
+					string w = edgePtr->data->destinationName;
+					Vertex<T>* wVertex = vertices->search(w);
+
+					if (!wVertex->visited)
+					{
+						cout << w << ":  " << wVertex->data << endl;
+						wVertex->visited = true;
+
+						Q.enqueue(wVertex);
+					}
+
+					edgePtr = edgePtr->next;
+				}
+			}
+		}
+		catch (const underflow_error& e)
+		{
+			throw invalid_argument("Vertex does not exist.  Have a nice day.");
+		}
+	}
+
 	// Mutators --------------------------------------------------------------------------
 	void clear()  // O(n)
 	{
@@ -167,6 +248,8 @@ public:
 				Vertex<T>* current = ptr->Data();
 
 				current->visited = false;
+
+				ptr = ptr->GetNext();
 			}
 		}
 	}
