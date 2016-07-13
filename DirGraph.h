@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "HashTable.h"
+#include "mQueue.h"
 #include "Vertex.h"
 #include "Edge.h"
 
@@ -148,6 +149,77 @@ public:
 		catch (const underflow_error& e)
 		{
 			throw invalid_argument("Either or both of the vertices do not exist.");
+		}
+	}
+
+	// Performs depth-first search on vertex v.  
+	void DFS(string v)
+	{
+		try
+		{
+			Vertex<T>* current = vertices->search(v);
+			cout << v << ":  " << current->data << endl;
+			current->visited = true;
+
+			Node<Edge*>* edgePtr = current->adjacencyList->head;
+
+			while (edgePtr != nullptr)
+			{
+				string w = edgePtr->data->destinationName;
+
+				// The next vertex will always exist as long as insertion/deletion was done properly.
+				Vertex<T>* nextVertex = vertices->search(w);
+
+				if (!nextVertex->visited)
+					DFS(w);
+
+				edgePtr = edgePtr->next;
+			}
+		}
+		catch (const underflow_error& e)
+		{
+			throw invalid_argument("Vertex does not exist.  Have a nice day.");
+		}
+	}
+
+	// Performs a breadth-first search on vertex v.
+	void BFS(string v)
+	{
+		try
+		{
+			Vertex<T>* start = vertices->search(v);
+			cout << v << ":  " << start->data << endl;
+			start->visited = true;
+
+			mQueue<Vertex<T>*> Q;
+			Q.enqueue(start);
+
+			while (!Q.isEmpty())
+			{
+				Vertex<T>* vVertex = Q.dequeue();
+
+				Node<Edge*>* edgePtr = vVertex->adjacencyList->head;
+
+				while (edgePtr != nullptr)
+				{
+					string w = edgePtr->data->destinationName;
+					Vertex<T>* wVertex = vertices->search(w);
+
+					if (!wVertex->visited)
+					{
+						cout << w << ":  " << wVertex->data << endl;
+						wVertex->visited = true;
+
+						Q.enqueue(wVertex);
+					}
+
+					edgePtr = edgePtr->next;
+				}
+			}
+		}
+		catch (const underflow_error& e)
+		{
+			throw invalid_argument("Vertex does not exist.  Have a nice day.");
 		}
 	}
 

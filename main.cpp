@@ -17,6 +17,20 @@ int main()
 
 	bool areEdgesEqual = e1.isUndirectedEqual(e2);
 
+	Graph<double>* undirectedCalc = new Graph<double>(23);
+
+	// After doing any search, be sure to call reset.
+	try
+	{
+		undirectedCalc->BFS("V1");
+		undirectedCalc->reset();
+		bool duh = undirectedCalc->isConnected();
+	}
+	catch (const invalid_argument& e)
+	{
+		cerr << e.what() << endl;
+	}
+
 	DirGraph<double>* calculator = new DirGraph<double>(23);
 
 	calculator->DisplayAdjacencyList();
