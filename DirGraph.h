@@ -2,6 +2,10 @@
 #define DIRGRAPH_H
 
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <stdexcept>
+#include <sstream>
 #include "HashTable.h"
 #include "mQueue.h"
 #include "Vertex.h"
@@ -22,14 +26,14 @@ public:
 		vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
 
 		// Test code...
-		vertices->insert("V1", new Vertex<T>(44));
+		/*vertices->insert("V1", new Vertex<T>(44));
 		vertices->insert("V2", new Vertex<T>(90));
 		vertices->insert("V3", new Vertex<T>(46));
 		vertices->insert("V4", new Vertex<T>(79));
 
 		insert("V2", "V1", 10);
 		insert("V3", "V1", 10);
-		insert("V1", "V3", 20);
+		insert("V1", "V3", 20);*/
 
 		// Note that unlike in the case of an undirected graph,
 		// directed graphs can contain edges not pointing in both
@@ -42,7 +46,7 @@ public:
 	}
 
 	// Accessors --------------------------------------------------------------------------
-	bool empty() const { return sz == 0; };
+	bool empty() const { return vertices->numElements == 0; };
 
 	// Returns the out-degree of the vertex stored at v in the hash table.  Can throw errors, so be sure to catch them...  O(1)
 	int outdegree(string v)
@@ -105,12 +109,6 @@ public:
 		{
 			throw invalid_argument("Vertex does not exist.");
 		}
-	}
-
-	// Program this later... --> probably O(n^2).
-	bool isConnected()
-	{
-		return false;
 	}
 
 	// Returns the number of edges in the graph
@@ -224,6 +222,66 @@ public:
 	}
 
 	// Mutators --------------------------------------------------------------------------
+	void BuildGraph()
+	{
+		string line;
+		ifstream myfile("DirGraph.txt");
+
+		if (myfile.is_open())
+		{
+			// Building array of vertices
+
+			while (getline(myfile, line)) 
+			{
+				string str(line);
+				string vname(str.substr(0, str.find_first_of(' ')));
+
+				//cout << "vname: " << vname << endl;
+
+				str = str.substr(str.find_first_of(' ') + 1, str.length());
+				string data(str.substr(0, str.find_first_of(' ')));
+
+				//cout << "vname data: " << data << endl;
+
+				//vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
+
+				vertices->insert(vname, new Vertex<T>(stoi(data)));
+			}
+
+			myfile.clear();
+			myfile.seekg(0, ios::beg);
+
+			while (getline(myfile, line)) 
+			{
+				string str(line);
+				string vnamefore(str.substr(0, str.find_first_of(' ')));
+
+				int StartPos = str.find_first_of('!');
+				string linein(str.substr(StartPos + 1, ' '));
+
+				mQueue<string> Q;
+				stringstream ss(linein);
+				string linedata;
+
+				while (getline(ss, linedata, ' ')) 
+				{
+					Q.enqueue(linedata);
+				}
+
+				while (!Q.isEmpty()) 
+				{
+					string ename = Q.dequeue();
+					string weight = Q.dequeue();
+
+					insert(vnamefore, ename, stoi(weight));
+				}
+			}
+			myfile.close();
+		}
+		else 
+			cout << "Unable to open file";
+	}
+
 	void clear()  // O(n)
 	{
 		edgeCount = 0;
