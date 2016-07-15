@@ -1,6 +1,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+
+#include <math.h> 
 #include <iostream>
 #include <fstream>
 #include <string>

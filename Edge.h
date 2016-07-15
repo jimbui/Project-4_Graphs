@@ -1,6 +1,8 @@
 #ifndef EDGE_H
 #define EDGE_H
 
+#include <string> 
+using namespace std ;
 // In order to determine the vertex the edge is storing, get the vertex and then 
 // use the hash table to determine the remainder of the edges:
 // Vertex<T>* v = hashBrown->search(key); --> this will always be the origin

@@ -1,6 +1,7 @@
 #ifndef DIRGRAPH_H
 #define DIRGRAPH_H
 
+#include <math.h>
 #include <iostream>
 #include <fstream>
 #include <string>
