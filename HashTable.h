@@ -139,6 +139,43 @@ public:
 		return returnVal;
 	}
 
+	// Check to see if a value exists at a certain key
+	bool CheckExistenceOf(const Key& key)
+	{
+		int hashValue = GetHashValue(key, arraySize);
+
+		ChainNode<Key, Value>* ptr = bucket[hashValue].GetHead();
+
+		if (ptr == nullptr)
+			return false;
+
+		else
+		{
+			// Searches the list until the item is found. O(1) is the optimal circumstance.  The worst-case
+			// scenario is one in which the key entered hashes to a list, but none of the list elements 
+			// contain the desired key (Search time = O(n)).
+			bool foundValue = false;
+
+			while (ptr != nullptr)
+			{
+				if (key == ptr->dataKey)
+				{
+					/*returnVal = ptr->data;
+					foundValue = true;
+					break;*/
+
+					return true;
+				}
+
+				ptr = ptr->next;
+			}
+
+			return foundValue;
+		}
+
+		// return returnVal;
+	}
+
 	// Mutators ------------------------------------------------------------------
 	// Inserts an element at the position specified by key
 	void insert(const Key &key, const Value &val)
@@ -165,7 +202,7 @@ public:
 				if (ptr->dataKey == key)
 				{
 					keyFound = true;
-					cout << "Key already contains value.  Unable to insert element." << endl;
+					// cout << "Key already contains value.  Unable to insert element." << endl;
 					break;
 				}
 
@@ -233,6 +270,63 @@ public:
 			if (!foundValue)
 				cout << "The key does not contain a value." << endl;
 		}
+	}
+
+	// Removes an element from the hash table without deleting it.
+	Value Remove(const Key &key)
+	{
+		int hashValue = GetHashValue(key, arraySize);
+
+		// Change this code.
+		ChainNode<Key, Value>* prevPtr = nullptr;
+		ChainNode<Key, Value>* ptr = bucket[hashValue].GetHead();
+
+		Value returnVal;
+
+		if (ptr == nullptr)
+			cout << "The key does not contain a value." << endl;
+		else
+		{
+			bool foundValue = false;
+
+			while (ptr != nullptr)
+			{
+				if (key == ptr->dataKey)
+				{
+					if (prevPtr == nullptr)  // The current position of ptr is the head
+					{
+						bucket[hashValue].head = ptr->next;
+						// cout << "Value at key " << ptr->dataKey << " deleted" << endl;
+						returnVal = ptr->data;
+						// delete ptr;
+						ptr = bucket[hashValue].head;
+						foundValue = true;
+						numElements--;
+						bucket[hashValue].sz--;
+						break;
+					}
+					else  // The current position of ptr is elsewhere
+					{
+						prevPtr->next = ptr->next;
+						// cout << "Value at key " << ptr->dataKey << " deleted" << endl;
+						returnVal = ptr->data;
+						// delete ptr;
+						foundValue = true;
+						numElements--;
+						bucket[hashValue].sz--;
+						break;
+					}
+				}
+
+				prevPtr = ptr;
+				ptr = ptr->next;
+			}
+
+			if (!foundValue)
+				cout << "The key does not contain a value." << endl;
+		}
+
+		return returnVal;
 	}
 
 	// Deletes all of the elements in the hash table, but not the table itself.

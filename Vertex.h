@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include "SLinkedList.h"
 #include "Edge.h"
+#include <math.h>
 
 using namespace std;
 
@@ -16,17 +17,39 @@ private:
 	// int id;
 	bool visited;
 	T data;
-	Vertex<T> * parent;
+	Vertex<T>* parent;
 	SLinkedList<Edge*>* adjacencyList;
+
+	// For Prim's algorithm...
+	double cheapestConnection;
+	Edge* edgePointer;
+	// string name;
 
 	// int depth;
 	template<class U> friend class Graph;
 	template<class U> friend class DirGraph;
 
 public:
-	Vertex(const T & data) :visited(false), /*depth(0),*/ parent(0)
+	Vertex() :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), data(0), edgePointer(nullptr)
+	{
+		adjacencyList = new SLinkedList<Edge*>();
+	}
+
+	Vertex(const T& data) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(nullptr)
 	{
 		this->data = data;
+		adjacencyList = new SLinkedList<Edge*>();
+	}
+
+	Vertex(const T& data, const string& name) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(nullptr)
+	{
+
+	}
+
+	Vertex(const T& data, const double& cheapestConnection) :visited(false), parent(0), edgePointer(nullptr)
+	{
+		this->data = data;
+		this->cheapestConnection = cheapestConnection;
 		adjacencyList = new SLinkedList<Edge*>();
 	}
 
@@ -38,6 +61,9 @@ public:
 	}
 
 	T GetData() const { return data; };
+
+	// Creates a new vertex identical to the original, except without edges.
+	Vertex* GetPureVertex() { return new Vertex(data, cheapestConnection); };
 
 	void visit()
 	{

@@ -22,8 +22,81 @@ private:
 	int sz;
 	int edgeCount;
 
+	// Helper method for MST.  Gets a set of connected vertices.
+	HashTable<string, Vertex<T>*>* BFSGetVertices(string v)
+	{
+		HashTable<string, Vertex<T>*>* verticesInBFS = new HashTable<string, Vertex<T>*>(sz, 0.5);
+
+		Vertex<T>* start = vertices->search(v);
+		// cout << v << ":  " << start->data << endl;
+		start->visited = true;
+		verticesInBFS->insert(v, start);
+
+		mQueue<Vertex<T>*> Q;
+		Q.enqueue(start);
+
+		while (!Q.isEmpty())
+		{
+			Vertex<T>* vVertex = Q.dequeue();
+
+			Node<Edge*>* edgePtr = vVertex->adjacencyList->head;
+
+			while (edgePtr != nullptr)
+			{
+				string w = edgePtr->data->destinationName;
+				Vertex<T>* wVertex = vertices->search(w);
+
+				if (!wVertex->visited)
+				{
+					// cout << w << ":  " << wVertex->data << endl;
+					wVertex->visited = true;
+					verticesInBFS->insert(w, wVertex);
+
+					Q.enqueue(wVertex);
+				}
+
+				edgePtr = edgePtr->next;
+			}
+		}
+
+		reset();
+		return verticesInBFS;
+	}
+
+	// Resets everything after a call to MST(...)
+	void ResetForPrimsAlgorithm()
+	{
+		for (int i = 0; i < vertices->arraySize; i++)
+		{
+			ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
+
+			while (ptr != nullptr)  // Checks each item in the chained hash table
+			{
+				Vertex<T>* current = ptr->Data();
+
+				current->visited = false;
+				current->parent = nullptr;
+				current->edgePointer = nullptr;
+
+				// Reset cheapest connection to infinity after call to mst...
+				current->cheapestConnection = 6.66 * pow(10, 66);
+
+				Node<Edge*>* edgePtr = current->adjacencyList->head;
+
+				while (edgePtr != nullptr)
+				{
+					edgePtr->data->edgeConnectingVToOtherVertex = false;
+
+					edgePtr = edgePtr->next;
+				}
+
+				ptr = ptr->GetNext();
+			}
+		}
+	}
+
 public:
-	Graph(int Sz = 20) :sz(Sz)
+	Graph(int Sz = 20) :sz(Sz), edgeCount(0)
 	{
 		vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
 
@@ -237,6 +310,157 @@ public:
 		}
 	}
 
+	// Creates the MST of an undirected graph.  Simple Prim's algorithm results in O(n^2) running time.
+	Graph<T>* MST(string v)
+	{
+		try
+		{
+			// Immediately throw error if vertex v is not in graph.
+			Vertex<T>* vVertex = vertices->search(v);
+
+			// Contains only the vertices in the MST --> see 1 ---------------------------------------------------------------
+			HashTable<string, Vertex<T>*>* mstVertices = BFSGetVertices(v);
+			// End 1 ---------------------------------------------------------------------------------------------------------
+			
+			int vertexCount = mstVertices->numElements;
+
+			// If there is only one vertex, return a new graph containing that vertex.
+			if (vertexCount == 1)
+			{
+				Graph<T>* newGraph = new Graph<T>(sz);
+				newGraph->vertices->insert(v, vVertex);
+
+				return newGraph;
+			}
+
+			// Gets the number of vertices to iterate through. --> see 2 -----------------------------------------------------
+			string* vertexKeys = new string[vertexCount];
+			bool* isVertexUsed = new bool[vertexCount];
+
+			// Gets all vertices and stores them in an array.  Note that the key to each vertex is kept for reference later.
+			// Note that since all of the vertices will exist in the MST, they will be added here.
+			int currentVertex = 0;
+			Graph<T>* mst = new Graph<T>(sz);
+
+			for (int i = 0; i < mstVertices->arraySize; i++)
+			{
+				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
+
+				while (ptr != nullptr)  // Checks each item in the chained hash table
+				{
+					Vertex<T>* current = ptr->Data();
+
+					vertexKeys[currentVertex] = current->adjacencyList->head->data->originName;
+					isVertexUsed[currentVertex] = false;
+
+					mst->vertices->insert(vertexKeys[currentVertex], current->GetPureVertex());
+
+					ptr = ptr->GetNext();
+					currentVertex++;
+				}
+			}
+			
+			// Initialize one mst vertex so that the algorithm will run from that point
+			// Vertex<T>* vVertex = mstVertices->search(v);
+
+			vVertex->cheapestConnection = 0;
+			vVertex->parent = nullptr;
+			
+			// While the element list is not empty, build the MST
+			int numElementsRemaining = vertexCount;
+			// End 2 ---------------------------------------------------------------------------------------------------------
+
+			while (numElementsRemaining > 0)
+			{
+				// Finds and removes vertex with least possible cost --> see 3A ----------------------------------------------
+				double minCost = 6.66 * pow(10, 66);
+				int mindex = 0;
+
+				// Find the vertex with the lowest possible key value --> key = connection with least weight
+				for (int i = 0; i < vertexCount; i++)
+				{
+					if (!isVertexUsed[i])
+					{
+						Vertex<T>* current = mstVertices->search(vertexKeys[i]);
+
+						if (minCost > current->cheapestConnection)
+						{
+							mindex = i;
+							minCost = current->cheapestConnection;
+						}
+					}
+				}
+
+				// Remove that vertex from the hash table
+				Vertex<T>* duhVertex = mstVertices->Remove(vertexKeys[mindex]);
+				numElementsRemaining--;
+				isVertexUsed[mindex] = true;
+				// End 3A ----------------------------------------------------------------------------------------------------
+
+				// Get the cheapest connection
+				/*Node<Edge*>* edgePtr = duhVertex->adjacencyList->head;
+				double minWeight = 6.66 * pow(10, 66);
+				Edge* cheapShot = nullptr;
+
+				while (edgePtr != nullptr)
+				{
+					if (minWeight > edgePtr->data->weight)
+					{
+						cheapShot = edgePtr->data;
+						minWeight = cheapShot->weight;
+					}
+
+					edgePtr = edgePtr->next;
+				}*/
+
+				// Add duh vertex to the MST, and add the first edge who's not a part of the graph already...
+				// mst->vertices->insert(vertexKeys[mindex], duhVertex->GetPureVertex());
+
+				// Add an edge if its minimum weight is not equal to the flag value --> see 3B -------------------------------
+				if (duhVertex->edgePointer != nullptr && !duhVertex->edgePointer->edgeConnectingVToOtherVertex)
+				{
+					// duhVertex->edgePointer->edgeConnectingVToOtherVertex = true;
+					// duhVertex->edgePointer = cheapShot;  // Make E[v] point to edge of least cost
+
+					// duhVertex->cheapestConnection = cheapShot->weight;
+					mst->insert(duhVertex->edgePointer->originName, duhVertex->edgePointer->destinationName, duhVertex->edgePointer->weight);
+				}
+				// End 3B ----------------------------------------------------------------------------------------------------
+			
+				// Begin 3C --------------------------------------------------------------------------------------------------
+				// Loop over all other edges.  If the edge's destination vertex is in the hash table (see new method)...
+				Node<Edge*>* edgePtr = duhVertex->adjacencyList->head;
+
+				while (edgePtr != nullptr)
+				{
+					// Replace edge wherever it is necessary
+					Edge* currentEdge = edgePtr->data;
+
+					if (mstVertices->CheckExistenceOf(currentEdge->destinationName) &&
+						edgePtr->data->weight < mstVertices->search(currentEdge->destinationName)->cheapestConnection)
+					{
+						Vertex<T>* wVertex = mstVertices->search(currentEdge->destinationName);
+						wVertex->cheapestConnection = currentEdge->weight;
+						wVertex->edgePointer = currentEdge;
+					}
+
+					edgePtr = edgePtr->next;
+				}
+				// End 3C ----------------------------------------------------------------------------------------------------
+
+				int blub = 0;
+			}
+
+			// O(|E| + |V|)
+			ResetForPrimsAlgorithm();
+			return mst;
+		}
+		catch (const underflow_error& e)
+		{
+			throw invalid_argument("Vertex in argument does not exist.");
+		}
+	}
+
 	// Mutators --------------------------------------------------------------------------
 	void BuildGraph()
 	{
@@ -252,16 +476,10 @@ public:
 				string str(line);
 				string vname(str.substr(0, str.find_first_of(' ')));
 
-				//cout << "vname: " << vname << endl;
-
 				str = str.substr(str.find_first_of(' ') + 1, str.length());
 				string data(str.substr(0, str.find_first_of(' ')));
 
-				//cout << "vname data: " << data << endl;
-
-				//vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
-
-				vertices->insert(vname, new Vertex<T>(stoi(data)));
+				vertices->insert(vname, new Vertex<T>(stod(data)));
 			}
 
 			myfile.clear();
@@ -289,7 +507,7 @@ public:
 					string ename = Q.dequeue();
 					string weight = Q.dequeue();
 
-					insert(vnamefore, ename, stoi(weight));
+					insert(vnamefore, ename, stod(weight));
 				}
 			}
 			myfile.close();
@@ -314,6 +532,10 @@ public:
 				Vertex<T>* current = ptr->Data();
 
 				current->visited = false;
+				current->parent = nullptr;
+
+				// Reset cheapest connection to infinity after call to mst...
+				current->cheapestConnection = 6.66 * pow(10, 66);
 
 				ptr = ptr->GetNext();
 			}

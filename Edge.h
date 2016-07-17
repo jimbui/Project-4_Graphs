@@ -16,6 +16,9 @@ class Edge
 private:
 	double weight;
 
+	// Flag for MST
+	bool edgeConnectingVToOtherVertex;
+
 	string originName;
 	string destinationName;
 
@@ -24,7 +27,10 @@ private:
 	template<class U> friend class DirGraph;
 
 public:
-	Edge(double weight, string originName, string destinationName)
+	Edge() :weight(0), originName(""), destinationName(""), edgeConnectingVToOtherVertex(false)
+	{}
+
+	Edge(double weight, string originName, string destinationName) :edgeConnectingVToOtherVertex(false)
 	{
 		this->weight = weight;
 		this->originName = originName;
