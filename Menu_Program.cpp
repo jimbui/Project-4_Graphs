@@ -425,50 +425,43 @@ void Menu_Program::Dijkstra_Algorithm()
 			string vertex;
 
 			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
-			else {
+
+			else 
+			{
 				std::cout << "  Input a vertex:  " ;
 				std::cin >> vertex;
 				Clear() ;
-
 				std::cout << "  BFS Traversal: " << " \n\n" ;
 				DirectedGraph->BFS(vertex);
 				DirectedGraph->reset() ;
 				std::cout << "\n" ;
-				}
+			}
 		}
 
 		else if (input == 9)
 		{
 			Clear() ;
 
-			/*string vertex1;
-			string vertex2;
+			string start_vertex ;
+			string end_vertex ;
 
 			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
-			else {
-				std::cout << "  Enter first vertex: ";
-				std::cin >> vertex1;
-				std::cout << "  Enter second vertex: ";
-				std::cin >> vertex2;
 
-				}*/
+			else 
+			{
+				std::cout << "  Enter starting vertex: ";
+				std::cin >> start_vertex;
+				Clear() ;
+				std::cout << "  Enter ending vertex: ";
+				std::cin >> end_vertex;
+				Clear() ;
+				DirectedGraph->shortPath(start_vertex , end_vertex) ;
+			}
 		}
 
 		else if (input == 10)
 		{
 			Clear() ;
-
-			/*string vertex1;
-			string vertex2;
-
-			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
-			else {
-				std::cout << "  Enter first vertex: ";
-				std::cin >> vertex1;
-				std::cout << "  Enter second vertex: ";
-				std::cin >> vertex2;
-
-				}*/
 		}
 
 
@@ -528,16 +521,9 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cout << "  Enter weight: ";
 				std::cin >> weight;
 
-				try
-				{
-					DirectedGraph->insert(input1, input2, weight);
-					std::cout << "  Element was inserted. " << " \n\n ";
-				}
-				catch (const invalid_argument& e)
-				{
-					cerr << e.what() << endl;
-				}
-				
+				DirectedGraph->insert(input1, input2, weight);
+
+				std::cout << "  Element was inserted. " << " \n\n ";
 			}
 		}
 
