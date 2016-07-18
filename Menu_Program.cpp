@@ -528,9 +528,16 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cout << "  Enter weight: ";
 				std::cin >> weight;
 
-				DirectedGraph->insert(input1, input2, weight);
-
-				std::cout << "  Element was inserted. " << " \n\n ";
+				try
+				{
+					DirectedGraph->insert(input1, input2, weight);
+					std::cout << "  Element was inserted. " << " \n\n ";
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
+				
 			}
 		}
 

@@ -25,7 +25,7 @@ private:
 
 public:
 
-	DirGraph(int Sz = 20) :sz(Sz)
+	DirGraph(int Sz = 20) :sz(Sz), edgeCount(0)
 	{
 		vertices = new HashTable<string, Vertex<T>*>(sz, 0.5) ;
 
@@ -486,6 +486,7 @@ public:
 							if (edgePtr->data->destinationName == v)
 							{
 								current->adjacencyList->del(edgePtr->data);
+								edgeCount--;
 								break;
 							}
 
@@ -498,7 +499,6 @@ public:
 			}
 
 			// Delete vertex out of hash table after all links to it have been removed.
-			edgeCount--;
 			vertices->erase(v);
 		}
 		catch (const underflow_error& e)

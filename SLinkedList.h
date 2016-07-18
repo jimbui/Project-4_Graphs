@@ -112,6 +112,7 @@ protected:
 						head = head->next;
 						delete prev;
 						sz--;
+						return;
 					}
 					else
 					{
@@ -121,6 +122,7 @@ protected:
 						ptr->next = ptr->next->next;
 						delete tmp;
 						sz--;
+						return;
 					}
 				}
 				prev = ptr;

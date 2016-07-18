@@ -641,6 +641,7 @@ public:
 		try
 		{
 			Vertex<T>* vVertex = vertices->search(v);  // Get the vertex to delete.
+			int numEdgesDeleted = 0;
 
 			Node<Edge*>* edgeNode = vVertex->adjacencyList->head;  // Gets the head vertex
 
@@ -670,7 +671,7 @@ public:
 					{
 						// I'm feeling lazy.  Don't tell the instructor... --> Inefficient function.
 						destinationVertex->adjacencyList->del(edgeNodeDest->data);
-						edgeCount--;
+						numEdgesDeleted++;
 						break;  // There will never be duplicate edges in the same list.
 					}
 
@@ -682,6 +683,7 @@ public:
 
 			// Delete vertex out of hash table after all links to it have been removed.
 			vertices->erase(v);
+			edgeCount -= numEdgesDeleted / 2;
 		}
 		catch (const underflow_error& e)
 		{

@@ -95,7 +95,7 @@ public:
                         head = head->next ;
                         delete prev ;
 						size-- ;
-						break ;
+						return ;
                     }
 
                     else
@@ -105,7 +105,7 @@ public:
                         ptr->next = ptr->next->next ;
                         delete tmp ;
                         size-- ;
-						break ;
+						return ;
                     }
                 }
 
