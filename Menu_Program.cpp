@@ -455,13 +455,29 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cout << "  Enter ending vertex: ";
 				std::cin >> end_vertex;
 				Clear() ;
-				DirectedGraph->shortPath(start_vertex , end_vertex) ;
+				DirectedGraph->shortPath(start_vertex , end_vertex , false) ;
 			}
 		}
 
 		else if (input == 10)
 		{
 			Clear() ;
+
+			string start_vertex ;
+			string end_vertex ;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+
+			else 
+			{
+				std::cout << "  Enter starting vertex: ";
+				std::cin >> start_vertex;
+				Clear() ;
+				std::cout << "  Enter ending vertex: ";
+				std::cin >> end_vertex;
+				Clear() ;
+				DirectedGraph->shortPath(start_vertex , end_vertex , true) ;
+			}
 		}
 
 

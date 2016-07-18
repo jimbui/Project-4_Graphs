@@ -223,7 +223,7 @@ public:
 		}
 	}
 	
-	void shortPath(string u , string v) // implementing djikstra's algorithm.
+	void shortPath(string u , string v , bool path) // implementing djikstra's algorithm.
 	{
 		if (sz > 0) // check to see if the graph is empty or not.
 		{
@@ -280,11 +280,12 @@ public:
 					Vertex<T>* next = vertices->search(name_temp) ; // goes to node that was just deleted.
 
 					if (current->cheapestConnection + weight_temp < next->cheapestConnection) // if the newly calculated distance is smaller.
-					{
+					{   // also update the parent for tracking purposes.
 						// std::cout << "\ncurrent->GetData() = " << current->GetData() << " \n" ;
 						std::cout << "next->GetData() = " << next->GetData() << " \n" ;
 						// std::cout << current->cheapestConnection << " " << weight_temp << " < " << next->cheapestConnection << "   " << current->cheapestConnection + weight_temp << " \n\n" ;
 						next->cheapestConnection = current->cheapestConnection + weight_temp ; // set new shortest distance.
+						next->parent = current ;
 					}
 
 					if (next->visited != true) // if the next node has yet to be visited , throw it into the heap tree.
@@ -295,7 +296,7 @@ public:
 					}
 				}
 
-				edge_weight_tree.clear() ;
+				// edge_weight_tree.clear() ;
 
 				if (visit_tree.empty()) 
 				{
@@ -310,9 +311,24 @@ public:
 			}
 
 			current  = vertices->search(v) ;
-			djikstras_display() ;
+			// djikstras_display() ;
 			for (int i = 0 ; i < 200 ; i++) std::cout << "\n\n" ;
-			std::cout << "  Distance to " << v << " is " << current->cheapestConnection << ". \n\n" ;
+			djikstras_display() ;
+
+			if (path == false) std::cout << "\n  Distance to " << v << " is " << current->cheapestConnection << ". \n\n" ;
+
+			else if (path == true) // this is for path retrieval.
+			{
+				std::cout << "\n  Shortest path: " ;
+
+				while(current != nullptr)
+				{	
+					std::cout << current->GetData() << " <- " ;
+					current = current->parent ;
+				}
+
+				std::cout << "START \n\n" ;
+			}
 		}
 
 		else std::cout << "  The graph is empty. \n" ; // if the graph is empty.
