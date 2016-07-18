@@ -12,22 +12,19 @@
 #include "Vertex.h"
 #include "Edge.h"
 
-using namespace std ;
+using namespace std;
 
 template<class T> class DirGraph
 {
-
 private:
-
 	HashTable<string, Vertex<T>*>* vertices;
 	int sz;
 	int edgeCount;
 
 public:
-
 	DirGraph(int Sz = 20) :sz(Sz), edgeCount(0)
 	{
-		vertices = new HashTable<string, Vertex<T>*>(sz, 0.5) ;
+		vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
 
 		// Test code...
 		/*vertices->insert("V1", new Vertex<T>(44));
@@ -160,7 +157,7 @@ public:
 		try
 		{
 			Vertex<T>* current = vertices->search(v);
-			cout << "  " << v << ":  " << current->data << endl;
+			cout << v << ":  " << current->data << endl;
 			current->visited = true;
 
 			Node<Edge*>* edgePtr = current->adjacencyList->head;
@@ -190,7 +187,7 @@ public:
 		try
 		{
 			Vertex<T>* start = vertices->search(v);
-			cout << "  " << v << ":  " << start->data << endl;
+			cout << v << ":  " << start->data << endl;
 			start->visited = true;
 
 			mQueue<Vertex<T>*> Q;
@@ -209,7 +206,7 @@ public:
 
 					if (!wVertex->visited)
 					{
-						cout << "  " << w << ":  " << wVertex->data << endl;
+						cout << w << ":  " << wVertex->data << endl;
 						wVertex->visited = true;
 
 						Q.enqueue(wVertex);
@@ -225,18 +222,6 @@ public:
 		}
 	}
 
-	// djikstras algorithm
-
-	void shortPath(string u , string v)
-	{
-		std::cout << "hello world! \n\n" ;
-	}
-
-	double distance(string u , string v)
-	{
-		std::cout << "also hello world! \n\n" ;
-	}
-
 	// Mutators --------------------------------------------------------------------------
 	void BuildGraph()
 	{
@@ -245,7 +230,9 @@ public:
 
 		if (myfile.is_open())
 		{
-			while (getline(myfile, line)) // building a vast array of battle vertices.
+			// Building array of vertices
+
+			while (getline(myfile, line)) 
 			{
 				string str(line);
 				string vname(str.substr(0, str.find_first_of(' ')));
@@ -256,87 +243,44 @@ public:
 				string data(str.substr(0, str.find_first_of(' ')));
 
 				//cout << "vname data: " << data << endl;
+
 				//vertices = new HashTable<string, Vertex<T>*>(sz, 0.5);
-				// std::cout << vname << " \n" ; // V1 , V2 , etc.
-				// std::cout << data << "        " << stoi(data) << "\n\n" ; // 101 , 202 , etc.
 
 				vertices->insert(vname, new Vertex<T>(stoi(data)));
 			}
 
-			// vertices->Display() ; // will display V1 , V2 , etc.  there is also a vertex created for each key Vn.
-			// std::cout << "DOES THIS WORK? 1 \n\n" ; // yes , yes it does.
-
 			myfile.clear();
-			myfile.seekg(0, ios::beg); // go to the beginnning of time.
+			myfile.seekg(0, ios::beg);
 
-			// now this is for the edges to other vertices.
-
-			while (getline(myfile, line)) // now this is for the edges to other vertices.
+			while (getline(myfile, line)) 
 			{
-				string str(line); // what is this?
+				string str(line);
 				string vnamefore(str.substr(0, str.find_first_of(' ')));
-				// std::cout << vnamefore << " \n" ; // this gets the name of the starting node.
 
-				int StartPos = str.find_first_of('!'); // everything after this are edge definitions.
+				int StartPos = str.find_first_of('!');
 				string linein(str.substr(StartPos + 1, ' '));
 
-				mQueue<string> Q; // new queue to put all the values in.
-				stringstream ss(linein); 
+				mQueue<string> Q;
+				stringstream ss(linein);
 				string linedata;
 
 				while (getline(ss, linedata, ' ')) 
 				{
-					std::cout << "linedata: " << linedata << "  \n" ;
-					string in = ss.str() ;
-					std::cout << "this is string in:  " << in << " \n\n" ;
-					if (in != "NULL")
-					{
-						Q.enqueue(linedata);
-						std::cout << "i just queued. \n" ;
-						// std::cout << "IF NULL EXISTS WTF. \n\n" ;
-					}
+					Q.enqueue(linedata);
 				}
-
-				// std::cout << "DOES THIS WORK? 3 \n\n" ; // yes , yes it does.
-
-				/*std::cout << "1. \n" ; 
-				Q.display(Q) ;
-				std::cout << " \n" ;*/
 
 				while (!Q.isEmpty()) 
 				{
-					std::cout << "does this queue? \n" ;
-					string edgename = Q.dequeue();
-					string edgeweight = Q.dequeue();
-					insert(vnamefore, edgename, stod(edgeweight)); // not inserting?
+					string ename = Q.dequeue();
+					string weight = Q.dequeue();
+
+					insert(vnamefore, ename, stoi(weight));
 				}
-				/*std::cout << "2. \n" ; //Q.display(Q) ;
-				Q.display(Q) ;
-				std::cout << " \n" ;*/
 			}
-
-			// std::cout << "DOES THIS WORK? 2 \n\n" ; // no , no it doesn't.
-
 			myfile.close();
 		}
 		else 
 			cout << "Unable to open file";
-	}
-
-	void BuildGraphNew()
-	{
-		vertices->insert("V1", new Vertex<T>(100)) ;
-		vertices->insert("V2", new Vertex<T>(101)) ;
-		vertices->insert("V3", new Vertex<T>(102)) ;
-		vertices->insert("V4", new Vertex<T>(200)) ;
-		vertices->insert("V5", new Vertex<T>(202)) ;
-
-		insert("V1", "V5", 20);
-		insert("V1", "V4", 30);
-		insert("V3", "V5", 20);
-		insert("V4", "V2", 60);
-		insert("V5", "V1", 10);
-		insert("V5", "V4", 50);
 	}
 
 	void clear()  // O(n)
@@ -356,7 +300,8 @@ public:
 				Vertex<T>* current = ptr->Data();
 
 				current->visited = false;
-				ptr = ptr->GetNext() ;
+
+				ptr = ptr->GetNext();
 			}
 		}
 	}
@@ -521,7 +466,7 @@ public:
 					string vName = ptr->DataKey();
 					Vertex<T>* current = ptr->Data();
 
-					cout << "  |" << vName << ":  " << current->GetData() << "| --> ";
+					cout << "|" << vName << ":  " << current->GetData() << "| --> ";
 
 					Node<Edge*>* edgePtr = current->adjacencyList->head;
 

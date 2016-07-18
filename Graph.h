@@ -519,6 +519,7 @@ public:
 	void clear()  // O(n)
 	{
 		vertices->clear();
+		sz = 0;
 	}
 
 	void reset()  // O(n)
@@ -640,8 +641,9 @@ public:
 	{
 		try
 		{
-			Vertex<T>* vVertex = vertices->search(v);  // Get the vertex to delete.
 			int numEdgesDeleted = 0;
+
+			Vertex<T>* vVertex = vertices->search(v);  // Get the vertex to delete.
 
 			Node<Edge*>* edgeNode = vVertex->adjacencyList->head;  // Gets the head vertex
 
@@ -682,8 +684,8 @@ public:
 			}
 
 			// Delete vertex out of hash table after all links to it have been removed.
-			vertices->erase(v);
 			edgeCount -= numEdgesDeleted / 2;
+			vertices->erase(v);
 		}
 		catch (const underflow_error& e)
 		{

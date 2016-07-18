@@ -92,13 +92,13 @@ protected:
 
 	}
 
-	void del(const T & data)
+	void del(const T& data)
 	{
 		Node<T> *ptr = head;
 		Node<T> *prev = head;
 
-		if (this->isEmpty())
-		{//check if the list is empty
+		if (this->isEmpty())  // check if the list is empty
+		{
 			throw underflow_error("You cannot delete something when there's nothing to delete. Can you ?");
 		}
 		else
@@ -111,23 +111,26 @@ protected:
 					{
 						head = head->next;
 						delete prev;
+
 						sz--;
-						return;
+						return;  // Return statement added to resolve error.
 					}
 					else
 					{
-						Node<T> *tmp = ptr->next;
-						ptr->id = ptr->next->id;
+						Node<T>* tmp = ptr->next;
+
 						ptr->data = ptr->next->data;
 						ptr->next = ptr->next->next;
+
 						delete tmp;
 						sz--;
-						return;
+						return;  // Return statement added to resolve error.
 					}
 				}
 				prev = ptr;
 				ptr = ptr->next;
 			}
+
 			if (ptr->data == data)
 			{
 				prev->next = nullptr;
