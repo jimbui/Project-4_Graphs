@@ -30,6 +30,8 @@ private:
 	template<class U> friend class DirGraph;
 
 public:
+	std::string name = " " ;
+
 	Vertex() :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), data(0), edgePointer(nullptr)
 	{
 		adjacencyList = new SLinkedList<Edge*>();

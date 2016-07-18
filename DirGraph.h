@@ -245,6 +245,7 @@ public:
 
 			djikstras_initialize() ; // makes all nodes unvisited and infinity distance away.
 			current->cheapestConnection = 0 ; // the starting node willk have a distance of zero from itself.
+			current->name = u ;
 			MaxHeapTree<std::string> edge_weight_tree(sz) ; // this will store nodes by key value , with smallest at the top.
 			MaxHeapTree<std::string> visit_tree(sz) ; // these are the nodes to visit.
 
@@ -278,6 +279,7 @@ public:
 					int weight_temp = edge_weight_tree.return_weight() ; // weight of the first item in the heap.
 					string name_temp = edge_weight_tree.delMax() ; // deletes first item and stores the name.
 					Vertex<T>* next = vertices->search(name_temp) ; // goes to node that was just deleted.
+					next->name = name_temp ;
 
 					if (current->cheapestConnection + weight_temp < next->cheapestConnection) // if the newly calculated distance is smaller.
 					{   // also update the parent for tracking purposes.
@@ -313,7 +315,7 @@ public:
 			current  = vertices->search(v) ;
 			// djikstras_display() ;
 			for (int i = 0 ; i < 200 ; i++) std::cout << "\n\n" ;
-			djikstras_display() ;
+			// djikstras_display() ;
 
 			if (path == false) std::cout << "\n  Distance to " << v << " is " << current->cheapestConnection << ". \n\n" ;
 
@@ -323,7 +325,7 @@ public:
 
 				while(current != nullptr)
 				{	
-					std::cout << current->GetData() << " <- " ;
+					std::cout << current->name << " <- " ;
 					current = current->parent ;
 				}
 
