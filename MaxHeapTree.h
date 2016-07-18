@@ -137,7 +137,7 @@ public:
 		dynamic_array = new HeapTreeNode<type>[initial_size] ;
 		array_size = initial_size ;
 		element_count = 0 ;
-		std::cout << "  Tree cleared and reset. \n\n" ;
+		// std::cout << "  Tree cleared and reset. \n\n" ;
 	}
 
 	void insert(double key_in , type data_in) // satisfies the heap property. // worst case is that it has to go though all the levels to the root , making this O(log_2(n))
