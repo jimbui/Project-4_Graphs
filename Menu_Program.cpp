@@ -215,7 +215,7 @@ void Menu_Program::Prim_Algorithm()
 				std::cout << "  Input a vertex:  " ;
 				std::cin >> vertex;
 
-				std::cout << "MST Traversal: " << " \n" ;
+				std::cout << "BFS Traversal of MST: " << " \n" ;
 					try
 					{
 						mst = undirectedGraph->MST(vertex);
@@ -277,9 +277,9 @@ void Menu_Program::Prim_Algorithm()
 			if (undirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
 			else {
 				
-				std::cout << "  Enter first vertices: ";
+				std::cout << "  Enter first vertex: ";
 				std::cin >> input1;
-				std::cout << "  Enter second vertices: ";
+				std::cout << "  Enter second vertex: ";
 				std::cin >> input2;
 				std::cout << "  Enter weight: ";
 				std::cin >> weight;
@@ -601,9 +601,9 @@ void Menu_Program::Dijkstra_Algorithm()
 			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
 			else {
 				
-				std::cout << "  Enter first edge: ";
+				std::cout << "  Enter first vertex: ";
 				std::cin >> input1;
-				std::cout << "  Enter second edge: ";
+				std::cout << "  Enter second vertex: ";
 				std::cin >> input2;
 				std::cout << "  Enter weight: ";
 				std::cin >> weight;
