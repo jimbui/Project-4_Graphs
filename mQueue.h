@@ -7,7 +7,7 @@ class mQueue :public SLinkedList<type> {
 private:
 	Node<type> *tail;
 public:
-	mQueue() :tail(nullptr) {}
+	mQueue() :tail(NULL) {}
 	bool isEmpty() const {
 		return SLinkedList<type>::isEmpty();
 	}

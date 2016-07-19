@@ -41,7 +41,7 @@ public:
 
 			Node<Edge*>* edgePtr = vVertex->adjacencyList->head;
 
-			while (edgePtr != nullptr)
+			while (edgePtr != NULL)
 			{
 				string w = edgePtr->data->destinationName;
 				Vertex<T>* wVertex = vertices->search(w);
@@ -70,20 +70,20 @@ public:
 		{
 			ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-			while (ptr != nullptr)  // Checks each item in the chained hash table
+			while (ptr != NULL)  // Checks each item in the chained hash table
 			{
 				Vertex<T>* current = ptr->Data();
 
 				current->visited = false;
-				current->parent = nullptr;
-				current->edgePointer = nullptr;
+				current->parent = NULL;
+				current->edgePointer = NULL;
 
 				// Reset cheapest connection to infinity after call to mst...
 				current->cheapestConnection = 6.66 * pow(10, 66);
 
 				Node<Edge*>* edgePtr = current->adjacencyList->head;
 
-				while (edgePtr != nullptr)
+				while (edgePtr != NULL)
 				{
 					edgePtr->data->edgeConnectingVToOtherVertex = false;
 
@@ -150,7 +150,7 @@ public:
 
 				bool breakThis = false;
 
-				while (ptr != nullptr)
+				while (ptr != NULL)
 				{
 					start = ptr->Data();
 					breakThis = true;
@@ -175,7 +175,7 @@ public:
 
 				Node<Edge*>* edgePtr = vVertex->adjacencyList->head;
 
-				while (edgePtr != nullptr)
+				while (edgePtr != NULL)
 				{
 					string w = edgePtr->data->destinationName;
 					Vertex<T>* wVertex = vertices->search(w);
@@ -218,11 +218,11 @@ public:
 			Node<Edge*>* edgeNode = uVertex->adjacencyList->head;
 
 			// Return "infinity" because the vertices are not connected.
-			if (edgeNode == nullptr)
+			if (edgeNode == NULL)
 				return 6.66 * pow(10, 66);
 
 			// Return where the edge node's destination is v. (This is u <----> v.)
-			while (edgeNode != nullptr)
+			while (edgeNode != NULL)
 			{
 				if (v == edgeNode->data->GetDestination())
 					return edgeNode->data->GetWeight();
@@ -250,7 +250,7 @@ public:
 
 			Node<Edge*>* edgePtr = current->adjacencyList->head;
 
-			while (edgePtr != nullptr)
+			while (edgePtr != NULL)
 			{
 				string w = edgePtr->data->destinationName;
 				
@@ -287,7 +287,7 @@ public:
 
 				Node<Edge*>* edgePtr = vVertex->adjacencyList->head;
 
-				while (edgePtr != nullptr)
+				while (edgePtr != NULL)
 				{
 					string w = edgePtr->data->destinationName;
 					Vertex<T>* wVertex = vertices->search(w);
@@ -346,7 +346,7 @@ public:
 			{
 				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-				while (ptr != nullptr)  // Checks each item in the chained hash table
+				while (ptr != NULL)  // Checks each item in the chained hash table
 				{
 					Vertex<T>* current = ptr->Data();
 
@@ -364,7 +364,7 @@ public:
 			// Vertex<T>* vVertex = mstVertices->search(v);
 
 			vVertex->cheapestConnection = 0;
-			vVertex->parent = nullptr;
+			vVertex->parent = NULL;
 			
 			// While the element list is not empty, build the MST
 			int numElementsRemaining = vertexCount;
@@ -400,9 +400,9 @@ public:
 				// Get the cheapest connection
 				/*Node<Edge*>* edgePtr = duhVertex->adjacencyList->head;
 				double minWeight = 6.66 * pow(10, 66);
-				Edge* cheapShot = nullptr;
+				Edge* cheapShot = NULL;
 
-				while (edgePtr != nullptr)
+				while (edgePtr != NULL)
 				{
 					if (minWeight > edgePtr->data->weight)
 					{
@@ -417,7 +417,7 @@ public:
 				// mst->vertices->insert(vertexKeys[mindex], duhVertex->GetPureVertex());
 
 				// Add an edge if its minimum weight is not equal to the flag value --> see 3B -------------------------------
-				if (duhVertex->edgePointer != nullptr && !duhVertex->edgePointer->edgeConnectingVToOtherVertex)
+				if (duhVertex->edgePointer != NULL && !duhVertex->edgePointer->edgeConnectingVToOtherVertex)
 				{
 					// duhVertex->edgePointer->edgeConnectingVToOtherVertex = true;
 					// duhVertex->edgePointer = cheapShot;  // Make E[v] point to edge of least cost
@@ -431,7 +431,7 @@ public:
 				// Loop over all other edges.  If the edge's destination vertex is in the hash table (see new method)...
 				Node<Edge*>* edgePtr = duhVertex->adjacencyList->head;
 
-				while (edgePtr != nullptr)
+				while (edgePtr != NULL)
 				{
 					// Replace edge wherever it is necessary
 					Edge* currentEdge = edgePtr->data;
@@ -549,12 +549,12 @@ public:
 		{
 			ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-			while (ptr != nullptr)  // Checks each item in the chained hash table
+			while (ptr != NULL)  // Checks each item in the chained hash table
 			{
 				Vertex<T>* current = ptr->Data();
 
 				current->visited = false;
-				current->parent = nullptr;
+				current->parent = NULL;
 
 				// Reset cheapest connection to infinity after call to mst...
 				current->cheapestConnection = 6.66 * pow(10, 66);
@@ -586,7 +586,7 @@ public:
 			Node<Edge*>* listPtrU = uVertex->adjacencyList->head;
 			Node<Edge*>* listPtrV = vVertex->adjacencyList->head;
 
-			if (listPtrU == nullptr && listPtrV == nullptr && w > 0)  // insert the new item because one does not already exist
+			if (listPtrU == NULL && listPtrV == NULL && w > 0)  // insert the new item because one does not already exist
 			{
 				Edge* newEdgeUToV = new Edge(w, u, v);
 				Edge* newEdgeVToU = new Edge(w, v, u);
@@ -601,7 +601,7 @@ public:
 			bool foundU = false;
 			// Else, enter this while-loop and see if the edge already exists
 
-			while (listPtrU != nullptr)
+			while (listPtrU != NULL)
 			{
 				if (listPtrU->data->destinationName == v)  // The link exists; however, the other node must be found before the value can be modified.
 				{
@@ -630,7 +630,7 @@ public:
 			}
 
 			// Else, enter this while-loop and get the other edge.  At this point, the only thing that will be modified is the edge's weight.
-			while (listPtrV != nullptr)
+			while (listPtrV != NULL)
 			{
 				if (listPtrV->data->destinationName == u)
 				{
@@ -673,22 +673,22 @@ public:
 			// O(n^2).
 
 			// There must be no connecting links.  (Assumption valid for undirected graph only.)
-			if (edgeNode == nullptr)
+			if (edgeNode == NULL)
 			{
 				vertices->erase(v);  // Do not delete a vertex in the graph.  Delete it from the hash table.
 				return;
 			}
 
 			// Search each connecting vertex for the link corresponding to v, and remove that link.
-			while (edgeNode != nullptr)
+			while (edgeNode != NULL)
 			{
 				// Get the destination vertex of the link...
 				Vertex<T>* destinationVertex = vertices->search(edgeNode->data->destinationName);
 
 				Node<Edge*>* edgeNodeDest = destinationVertex->adjacencyList->head;
 
-				// By the rules of undirected graphs, edgeNodeDest will never be a nullptr.
-				while (edgeNodeDest != nullptr)
+				// By the rules of undirected graphs, edgeNodeDest will never be a NULL.
+				while (edgeNodeDest != NULL)
 				{
 					if (edgeNodeDest->data->destinationName == v)  // Where these two conditions are equal, the edge will be removed.
 					{
@@ -723,7 +723,7 @@ public:
 			{
 				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-				while (ptr != nullptr)  // Checks each item in the chained hash table
+				while (ptr != NULL)  // Checks each item in the chained hash table
 				{
 					string vName = ptr->DataKey();
 					Vertex<T>* current = ptr->Data();
@@ -732,7 +732,7 @@ public:
 
 					Node<Edge*>* edgePtr = current->adjacencyList->head;
 
-					while (edgePtr != nullptr)
+					while (edgePtr != NULL)
 					{
 						cout << edgePtr->data->GetDestination() << " (" << edgePtr->data->GetWeight() << ") --> ";
 						edgePtr = edgePtr->next;

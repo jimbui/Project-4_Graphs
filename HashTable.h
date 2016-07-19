@@ -53,7 +53,7 @@ public:
 			// Traverse the old list, get the nodes, and assign them to the correct place in the new list
 			ChainNode<Key, Value>* ptr = bucket[i].GetHead();
 
-			while (ptr != nullptr)
+			while (ptr != NULL)
 			{
 				Key nodeDataKey = ptr->dataKey;
 
@@ -110,7 +110,7 @@ public:
 
 		Value returnVal;
 
-		if (ptr == nullptr)
+		if (ptr == NULL)
 			throw underflow_error("The bucket is empty; no value was returned.");
 
 		else
@@ -120,7 +120,7 @@ public:
 			// contain the desired key (Search time = O(n)).
 			bool foundValue = false;
 
-			while (ptr != nullptr)
+			while (ptr != NULL)
 			{
 				if (key == ptr->dataKey)
 				{
@@ -146,7 +146,7 @@ public:
 
 		ChainNode<Key, Value>* ptr = bucket[hashValue].GetHead();
 
-		if (ptr == nullptr)
+		if (ptr == NULL)
 			return false;
 
 		else
@@ -156,7 +156,7 @@ public:
 			// contain the desired key (Search time = O(n)).
 			bool foundValue = false;
 
-			while (ptr != nullptr)
+			while (ptr != NULL)
 			{
 				if (key == ptr->dataKey)
 				{
@@ -184,7 +184,7 @@ public:
 
 		ChainNode<Key, Value>* ptr = bucket[hashVal].GetHead();
 
-		if (ptr == nullptr)  // The bucket is empty
+		if (ptr == NULL)  // The bucket is empty
 		{
 			bucket[hashVal].insert(val, key);
 			numElements++;
@@ -197,7 +197,7 @@ public:
 		{
 			bool keyFound = false;
 
-			while (ptr != nullptr)
+			while (ptr != NULL)
 			{
 				if (ptr->dataKey == key)
 				{
@@ -227,20 +227,20 @@ public:
 		int hashValue = GetHashValue(key, arraySize);
 
 		// Change this code.
-		ChainNode<Key, Value>* prevPtr = nullptr;
+		ChainNode<Key, Value>* prevPtr = NULL;
 		ChainNode<Key, Value>* ptr = bucket[hashValue].GetHead();
 
-		if (ptr == nullptr)
+		if (ptr == NULL)
 			cout << "The key does not contain a value." << endl;
 		else
 		{
 			bool foundValue = false;
 
-			while (ptr != nullptr)
+			while (ptr != NULL)
 			{
 				if (key == ptr->dataKey)
 				{
-					if (prevPtr == nullptr)  // The current position of ptr is the head
+					if (prevPtr == NULL)  // The current position of ptr is the head
 					{
 						bucket[hashValue].head = ptr->next;
 						cout << "Value at key " << ptr->dataKey << " deleted" << endl;
@@ -278,22 +278,22 @@ public:
 		int hashValue = GetHashValue(key, arraySize);
 
 		// Change this code.
-		ChainNode<Key, Value>* prevPtr = nullptr;
+		ChainNode<Key, Value>* prevPtr = NULL;
 		ChainNode<Key, Value>* ptr = bucket[hashValue].GetHead();
 
 		Value returnVal;
 
-		if (ptr == nullptr)
+		if (ptr == NULL)
 			cout << "The key does not contain a value." << endl;
 		else
 		{
 			bool foundValue = false;
 
-			while (ptr != nullptr)
+			while (ptr != NULL)
 			{
 				if (key == ptr->dataKey)
 				{
-					if (prevPtr == nullptr)  // The current position of ptr is the head
+					if (prevPtr == NULL)  // The current position of ptr is the head
 					{
 						bucket[hashValue].head = ptr->next;
 						// cout << "Value at key " << ptr->dataKey << " deleted" << endl;
@@ -364,7 +364,7 @@ public:
 			{
 				ChainNode<Key, Value>* ptr = bucket[i].GetHead();
 
-				if (ptr != nullptr)
+				if (ptr != NULL)
 					cout << ptr->data << endl;
 			}
 		}

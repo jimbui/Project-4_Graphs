@@ -33,23 +33,23 @@ private:
 
 public:
 
-	Vertex() :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), data(0), edgePointer(nullptr), name(" ")
+	Vertex() :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), data(0), edgePointer(NULL), name(" ")
 	{
 		adjacencyList = new SLinkedList<Edge*>();
 	}
 
-	Vertex(const T& data) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(nullptr), name(" ")
+	Vertex(const T& data) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(NULL), name(" ")
 	{
 		this->data = data;
 		adjacencyList = new SLinkedList<Edge*>();
 	}
 
-	Vertex(const T& data, const string& name) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(nullptr), name(" ")
+	Vertex(const T& data, const string& name) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(NULL), name(" ")
 	{
 
 	}
 
-	Vertex(const T& data, const double& cheapestConnection) :visited(false), parent(0), edgePointer(nullptr), name(" ")
+	Vertex(const T& data, const double& cheapestConnection) :visited(false), parent(0), edgePointer(NULL), name(" ")
 	{
 		this->data = data;
 		this->cheapestConnection = cheapestConnection;
@@ -70,14 +70,14 @@ public:
 
 	void visit()
 	{
-		cout << (this == nullptr ? "NULL" : this->data) << endl;
+		cout << (this == NULL ? "NULL" : this->data) << endl;
 	}
 
 	void visit(Vertex<T>* origin)
 	{
 		this->parent = origin;
 
-		if (origin == nullptr) 
+		if (origin == NULL) 
 			this->depth = 0;
 		else 
 			this->depth = origin->depth + 1;

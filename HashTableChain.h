@@ -16,12 +16,12 @@ private:
 	template<class key, class value> friend class HashTable;
 
 public:
-	HashTableChain() :head(nullptr), sz(0)
+	HashTableChain() :head(NULL), sz(0)
 	{}
 
 	bool isEmpty() const
 	{
-		return head == nullptr;
+		return head == NULL;
 	}
 
 	int Size() const { return sz; };
@@ -45,7 +45,7 @@ public:
 		ChainNode<Key, Value> *tmp_node = new ChainNode<Key, Value>(data, dataKey);
 		ChainNode<Key, Value> *ptr = head;
 
-		if (ptr == nullptr)
+		if (ptr == NULL)
 		{
 			head = tmp_node;
 			sz++;
@@ -53,7 +53,7 @@ public:
 
 		else
 		{
-			while (ptr->next != nullptr)
+			while (ptr->next != NULL)
 			{
 				ptr = ptr->next;
 			}
@@ -101,7 +101,7 @@ public:
 		ChainNode<Key, Value> *ptr = head;
 		ChainNode<Key, Value> *prev = head;
 
-		while (ptr != nullptr)
+		while (ptr != NULL)
 		{
 			if (ptr->data == data)
 			{
@@ -120,7 +120,7 @@ public:
 		}
 
 		if (sz == 0)
-			head = nullptr;
+			head = NULL;
 
 		// printLst();
 	}
@@ -130,7 +130,7 @@ public:
 		ChainNode<Key, Value> *ptr = head;
 		int counter = 0;
 
-		while (ptr != nullptr)
+		while (ptr != NULL)
 		{
 			cout << ptr->data << " --> ";
 			ptr = ptr->next;
@@ -144,14 +144,14 @@ public:
 		ChainNode<Key, Value> *ptr = head;
 		ChainNode<Key, Value> *prev = head;
 
-		while (ptr != nullptr)
+		while (ptr != NULL)
 		{
 			ptr = ptr->next;
 			delete prev;
 			prev = ptr;
 		}
 
-		head = nullptr;
+		head = NULL;
 	}
 };
 

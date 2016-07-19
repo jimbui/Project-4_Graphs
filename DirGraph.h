@@ -78,7 +78,7 @@ public:
 				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
 				// If the bucket is empty, nothing happens in this loop.
-				while (ptr != nullptr)
+				while (ptr != NULL)
 				{
 					Vertex<T>* current = ptr->Data();
 
@@ -88,7 +88,7 @@ public:
 						Node<Edge*>* edgePtr = current->adjacencyList->head;
 
 						// Check each edge in each vertex
-						while (edgePtr != nullptr)
+						while (edgePtr != NULL)
 						{
 							// If the edge's destination is the vertex being searched, increment in-degree and break.
 							if (edgePtr->data->destinationName == v)
@@ -131,11 +131,11 @@ public:
 			Node<Edge*>* edgeNode = uVertex->adjacencyList->head;
 
 			// Return "infinity" because the vertices are not connected.
-			if (edgeNode == nullptr)
+			if (edgeNode == NULL)
 				return 6.66 * pow(10, 66);
 
 			// Return where the edge node's destination is v. (This is u --> v.)
-			while (edgeNode != nullptr)
+			while (edgeNode != NULL)
 			{
 				if (v == edgeNode->data->GetDestination())
 					return edgeNode->data->GetWeight();
@@ -163,7 +163,7 @@ public:
 
 			Node<Edge*>* edgePtr = current->adjacencyList->head;
 
-			while (edgePtr != nullptr)
+			while (edgePtr != NULL)
 			{
 				string w = edgePtr->data->destinationName;
 
@@ -200,7 +200,7 @@ public:
 
 				Node<Edge*>* edgePtr = vVertex->adjacencyList->head;
 
-				while (edgePtr != nullptr)
+				while (edgePtr != NULL)
 				{
 					string w = edgePtr->data->destinationName;
 					Vertex<T>* wVertex = vertices->search(w);
@@ -276,7 +276,7 @@ public:
 
 				while (!edge_weight_tree.empty()) // while this tree still has elements.
 				{
-					int weight_temp = edge_weight_tree.return_weight() ; // weight of the first item in the heap.
+					double weight_temp = edge_weight_tree.return_weight() ; // weight of the first item in the heap.
 					string name_temp = edge_weight_tree.delMax() ; // deletes first item and stores the name.
 					Vertex<T>* next = vertices->search(name_temp) ; // goes to node that was just deleted.
 					next->name = name_temp ;
@@ -319,18 +319,34 @@ public:
 
 			if (path == false) std::cout << "\n  Distance to " << v << " is " << current->cheapestConnection << ". \n\n" ;
 
-			else if (path == true) // this is for path retrieval.
-			{
-				std::cout << "\n  Shortest path: " ;
+			// else if (path == true) // this is for path retrieval.
+			// {
+				// std::cout << "\n  Shortest path: " ;
 
-				while(current != nullptr)
-				{	
-					std::cout << current->name << " <- " ;
-					current = current->parent ;
-				}
+				// while(current != NULL)
+				// {	
+					// std::cout << current->name << " <- " ;
+					// current = current->parent ;
+				// }
 
-				std::cout << "START \n\n" ;
-			}
+				// std::cout << "START \n\n" ;
+			// }
+      
+      else if (path == true) // this is for path retrieval.
+     	{
+     	  if (current->cheapestConnection > 7000000) std::cout << " There is no path to the node. \n\n" ;
+    
+       	else
+       	{ 
+         	std::cout << "\n Shortest path: " ;
+         	while(current != NULL)
+         	{ 
+           	std::cout << current->name << " <- " ;
+           	current = current->parent ;
+         	}
+         	std::cout << "START \n\n" ;
+       	}
+     	}
 		}
 
 		else std::cout << "  The graph is empty. \n" ; // if the graph is empty.
@@ -443,7 +459,7 @@ public:
 			{
 				std::cout << "\n  Shortest path: " ;
 
-				while(current != nullptr)
+				while (current != NULL)
 				{	
 					std::cout << current->name << " <- " ;
 					current = current->parent ;
@@ -463,11 +479,12 @@ public:
 		{
 			ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-			while (ptr != nullptr)  // Checks each item in the chained hash table
+			while (ptr != NULL)  // Checks each item in the chained hash table
 			{
 				Vertex<T>* current = ptr->Data();
 
 				current->visited = false;
+        current->parent = NULL;
 				current->cheapestConnection = 9001 * 9001 ; // over 9000.
 				ptr = ptr->GetNext() ;
 			}
@@ -480,7 +497,7 @@ public:
 		{
 			ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-			while (ptr != nullptr)  // Checks each item in the chained hash table
+			while (ptr != NULL)  // Checks each item in the chained hash table
 			{
 				Vertex<T>* current = ptr->Data();
 				std::cout << "  " << current->data << " = " << current->cheapestConnection << "\n" ;
@@ -562,7 +579,7 @@ public:
 		{
 			ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-			while (ptr != nullptr)  // Checks each item in the chained hash table
+			while (ptr != NULL)  // Checks each item in the chained hash table
 			{
 				Vertex<T>* current = ptr->Data();
 
@@ -595,7 +612,7 @@ public:
 			Node<Edge*>* listPtrU = uVertex->adjacencyList->head;
 			// Node<Edge*>* listPtrV = vVertex->adjacencyList->head;
 
-			if (listPtrU == nullptr /*&& listPtrV == nullptr*/)  // insert the new item because one does not already exist
+			if (listPtrU == NULL /*&& listPtrV == NULL*/)  // insert the new item because one does not already exist
 			{
 				// In a directed graph, only one edge is inserted.
 				Edge* newEdgeUToV = new Edge(w, u, v);
@@ -609,7 +626,7 @@ public:
 			bool foundU = false;
 			// Else, enter this while-loop and see if the edge already exists
 
-			while (listPtrU != nullptr)
+			while (listPtrU != NULL)
 			{
 				if (listPtrU->data->destinationName == v)  // The link exists; however, the other node must be found before the value can be modified.
 				{
@@ -628,7 +645,7 @@ public:
 			}
 
 			// Else, enter this while-loop and get the other edge.  At this point, the only thing that will be modified is the edge's weight.
-			//while (listPtrV != nullptr)
+			//while (listPtrV != NULL)
 			//{
 			//	if (listPtrV->data->destinationName == u)  // In this case, there is already an existing edge.
 			//	{
@@ -685,7 +702,7 @@ public:
 			{
 				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-				while (ptr != nullptr)
+				while (ptr != NULL)
 				{
 					Vertex<T>* current = ptr->Data();
 
@@ -693,7 +710,7 @@ public:
 					{
 						Node<Edge*>* edgePtr = current->adjacencyList->head;
 
-						while (edgePtr != nullptr)
+						while (edgePtr != NULL)
 						{
 							if (edgePtr->data->destinationName == v)
 							{
@@ -749,7 +766,7 @@ public:
 			{
 				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
 
-				while (ptr != nullptr)  // Checks each item in the chained hash table
+				while (ptr != NULL)  // Checks each item in the chained hash table
 				{
 					string vName = ptr->DataKey();
 					Vertex<T>* current = ptr->Data();
@@ -758,7 +775,7 @@ public:
 
 					Node<Edge*>* edgePtr = current->adjacencyList->head;
 
-					while (edgePtr != nullptr)
+					while (edgePtr != NULL)
 					{
 						cout << edgePtr->data->GetDestination() << " (" << edgePtr->data->GetWeight() << ") --> ";
 						edgePtr = edgePtr->next;

@@ -151,7 +151,7 @@ public:
 		insert_swap(element_count) ;
 	}
 
-	void insert(double key_in , type data_in , int weight_in) // satisfies the heap property. // worst case is that it has to go though all the levels to the root , making this O(log_2(n))
+	void insert(double key_in , type data_in , double weight_in) // satisfies the heap property. // worst case is that it has to go though all the levels to the root , making this O(log_2(n))
 	{
 		if (element_count + 1 == array_size) this->resize_up() ;
 
@@ -186,7 +186,7 @@ public:
 		}
 	}
 
-	int return_weight()
+	double return_weight()
 	{
 		return dynamic_array[1].get_weight() ;
 	}

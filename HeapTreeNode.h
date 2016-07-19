@@ -10,7 +10,7 @@ private:
 
 	double key_element ;
 	type data_element ;
-	int weight_element ;
+	double weight_element ;
 
 public:
 
@@ -27,7 +27,7 @@ public:
 		// weight_element = 0 ;
 	}
 
-	HeapTreeNode(double key_in ,  type data_in , int weight_in)
+	HeapTreeNode(double key_in ,  type data_in , double weight_in)
 	{
 		key_element = key_in ;
 		data_element = data_in ;
@@ -36,7 +36,7 @@ public:
 
 	double get_key(){return key_element ;}
 	type get_data(){return data_element ;}
-	int get_weight(){return weight_element ;}
+	double get_weight(){return weight_element ;}
 	void display(){std::cout << "  [" << this->get_key() << " , " << this->get_data() << " , " << this->get_weight() << "] \n" ;}
 } ;
 

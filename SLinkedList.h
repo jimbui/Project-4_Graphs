@@ -19,11 +19,11 @@ protected:
 	template<class U> friend class Vertex;
 
 protected:
-	SLinkedList() :sz(0), head(nullptr) {}
+	SLinkedList() :sz(0), head(NULL) {}
 
 	bool isEmpty() const
 	{
-		return head == nullptr;
+		return head == NULL;
 	}
 
 	int getSize() const
@@ -35,7 +35,7 @@ protected:
 	{
 		Node<T> *tmp = new Node<T>(data);
 
-		if (head == nullptr)
+		if (head == NULL)
 		{
 			head = tmp;
 			sz++;
@@ -44,7 +44,7 @@ protected:
 		{
 			Node<T> *ptr = head;
 
-			while (ptr->next != nullptr)
+			while (ptr->next != NULL)
 			{
 				ptr = ptr->next;
 			}
@@ -72,7 +72,7 @@ protected:
 		{
 			Node<T> *ptr = head;
 			int k = 1;
-			while (ptr->next != nullptr)
+			while (ptr->next != NULL)
 			{
 				if (k == pos - 1)
 				{
@@ -103,7 +103,7 @@ protected:
 		}
 		else
 		{
-			while (ptr->next != nullptr)
+			while (ptr->next != NULL)
 			{
 				if (ptr->data == data)
 				{
@@ -133,20 +133,20 @@ protected:
 
 			if (ptr->data == data)
 			{
-				prev->next = nullptr;
+				prev->next = NULL;
 				delete ptr;
 				sz--;
 			}
 		}
 
 		if (sz == 0)
-			head = nullptr;
+			head = NULL;
 	}
 
 	void printList() const
 	{
 		Node<T> *ptr = head;
-		while (ptr->next != nullptr)
+		while (ptr->next != NULL)
 		{
 			cout << "Node[" << ptr->id << "]= '" << ptr->data << "'-->";
 			ptr = ptr->next;
@@ -161,14 +161,14 @@ protected:
 		Node<T> *ptr = head;
 		Node<T> *prev = head;
 
-		while (ptr != nullptr)
+		while (ptr != NULL)
 		{
 			ptr = ptr->next;
 			delete prev;
 			prev = ptr;
 		}
 
-		head = nullptr;
+		head = NULL;
 	}
 
 	/*friend ostream& operator<<(ostream& os, const SLinkedList<T>& ls)
