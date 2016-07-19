@@ -12,7 +12,7 @@ template<class Key, class Value> class HashTable
 	template<class U> friend class Graph;
 	template<class U> friend class DirGraph;
 
-private:
+public:
 	// Contains the total number of values in the entire hash table
 	int numElements;
 

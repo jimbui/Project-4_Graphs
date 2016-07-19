@@ -84,8 +84,8 @@ void Menu_Program::Prim_Algorithm()
 		std::cout << "    10. Create graph from text file." << std::endl ;
 		std::cout << "    11. Clear graph." << std::endl ;
 		std::cout << "    12. Reset graph." << std::endl ;
-		std::cout << "    13. Insert vertices into graph." << std::endl ;
-		std::cout << "    14. Delete item from graph." << std::endl ;
+		std::cout << "    13. Insert edge into graph." << std::endl ;
+		std::cout << "    14. Delete vertex from graph." << std::endl ;
 		std::cout << "    15. Go back." << std::endl << std::endl ;
 
 		std::cout << "  " ;
@@ -168,7 +168,14 @@ void Menu_Program::Prim_Algorithm()
 				std::cin >> vertex;
 
 				std::cout << "DFS Traversal: " << " \n" ;
-				undirectedGraph->DFS(vertex);
+					try
+					{
+						undirectedGraph->DFS(vertex);
+					}
+					catch (const invalid_argument& e)
+					{
+						cerr << e.what() << endl;
+					}
 				}
 
 		}
@@ -185,7 +192,14 @@ void Menu_Program::Prim_Algorithm()
 				std::cin >> vertex;
 
 				std::cout << "BFS Traversal: " << " \n" ;
-				undirectedGraph->BFS(vertex);
+					try
+					{
+						undirectedGraph->BFS(vertex);
+					}
+					catch (const invalid_argument& e)
+					{
+						cerr << e.what() << endl;
+					}
 				}
 		}
 
@@ -193,7 +207,8 @@ void Menu_Program::Prim_Algorithm()
 		{
 			Clear() ;
 
-			/*string vertex;
+			string vertex;
+			Graph<double> *mst = new Graph<double>(undirectedGraph->vertices->NumberOfBuckets());
 
 			if (undirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
 			else {
@@ -201,8 +216,16 @@ void Menu_Program::Prim_Algorithm()
 				std::cin >> vertex;
 
 				std::cout << "MST Traversal: " << " \n" ;
-				undirectedGraph->MST(vertex);
-				}*/
+					try
+					{
+						mst = undirectedGraph->MST(vertex);
+						mst->BFS(vertex);
+					}
+					catch (const invalid_argument& e)
+					{
+						cerr << e.what() << endl;
+					}
+				}
 		}
 
 		else if (input == 10)
@@ -210,7 +233,7 @@ void Menu_Program::Prim_Algorithm()
 			Clear() ;
 
 			if (undirectedGraph->empty()) {
-				undirectedGraph->BuildGraph();
+				undirectedGraph->BuildGraphNew();
 				std::cout << "  The graph was created from the text file. \n\n" ;
 			}
 			else std::cout << "  The graph was already created. " << " \n\n" ;
@@ -254,16 +277,23 @@ void Menu_Program::Prim_Algorithm()
 			if (undirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
 			else {
 				
-				std::cout << "  Enter first edge: ";
+				std::cout << "  Enter first vertices: ";
 				std::cin >> input1;
-				std::cout << "  Enter second edge: ";
+				std::cout << "  Enter second vertices: ";
 				std::cin >> input2;
 				std::cout << "  Enter weight: ";
 				std::cin >> weight;
 
-				undirectedGraph->insert(input1, input2, weight);
+				try
+				{
+					undirectedGraph->insert(input1, input2, weight);
+					std::cout << "  Element was inserted. " << " \n\n ";
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
 
-				std::cout << "  Element was inserted. " << " \n\n ";
 			}
 		}
 
@@ -279,9 +309,16 @@ void Menu_Program::Prim_Algorithm()
 				std::cout << "  Enter vertex to be deleted: ";
 				std::cin >> vertex;
 
-				undirectedGraph->del(vertex);
+				try
+				{
+					undirectedGraph->del(vertex);
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
 				
-				std::cout << "Vertex " << vertex << " was deleted and connections were updated. " << " \n\n";
+				//std::cout << "Vertex " << vertex << " was deleted and connections were updated. " << " \n\n";
 				}	
 		}
 
@@ -316,13 +353,13 @@ void Menu_Program::Dijkstra_Algorithm()
 		std::cout << "    6.  Returns the weight of the edge connecting two vertices." << std::endl ;
 		std::cout << "    7.  Performs DFS traversal starting on vertex inputed." << std::endl ;
 		std::cout << "    8.  Performs BFS traversal starting on vertex inputed." << std::endl ;
-		std::cout << "    9.  Returns shortest path between two vertices." << std::endl ;
-		std::cout << "    10. Returns shortest distance between two vertices." << std::endl ;
+		std::cout << "    9.  Returns shortest distance between two vertices." << std::endl ;
+		std::cout << "    10. Returns shortest path between two vertices." << std::endl ;
 		std::cout << "    11. Create graph from text file." << std::endl ; // what is the difference betweent this and 1?
 		std::cout << "    12. Clear graph." << std::endl ;
 		std::cout << "    13. Reset graph." << std::endl ;
-		std::cout << "    14. Inset vertices into graph." << std::endl ;
-		std::cout << "    15. Delete item from graph." << std::endl ;
+		std::cout << "    14. Insert edge into graph." << std::endl ;
+		std::cout << "    15. Delete vertex from graph." << std::endl ;
 		std::cout << "    16. Go back." << std::endl << std::endl ;
 
 		std::cout << "  ";
@@ -410,10 +447,18 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cin >> vertex;
 				Clear() ;
 
-				std::cout << "  DFS Traversal: " << " \n\n" ;
-				DirectedGraph->DFS(vertex);
-				DirectedGraph->reset() ;
-				std::cout << "\n" ;
+				try
+				{
+					std::cout << "  DFS Traversal: " << " \n\n" ;
+					DirectedGraph->DFS(vertex);
+					DirectedGraph->reset() ;
+					std::cout << "\n" ;
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
+
 				}
 
 		}
@@ -431,10 +476,19 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cout << "  Input a vertex:  " ;
 				std::cin >> vertex;
 				Clear() ;
-				std::cout << "  BFS Traversal: " << " \n\n" ;
-				DirectedGraph->BFS(vertex);
-				DirectedGraph->reset() ;
-				std::cout << "\n" ;
+
+				try
+				{
+					std::cout << "  BFS Traversal: " << " \n\n" ;
+					DirectedGraph->BFS(vertex);
+					DirectedGraph->reset() ;
+					std::cout << "\n" ;
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
+	
 			}
 		}
 
@@ -455,7 +509,16 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cout << "  Enter ending vertex: ";
 				std::cin >> end_vertex;
 				Clear() ;
-				DirectedGraph->shortPath(start_vertex , end_vertex , false) ;
+
+				try
+				{
+					DirectedGraph->shortPath(start_vertex , end_vertex , false) ;
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
+				
 			}
 		}
 
@@ -476,7 +539,15 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cout << "  Enter ending vertex: ";
 				std::cin >> end_vertex;
 				Clear() ;
-				DirectedGraph->shortPath(start_vertex , end_vertex , true) ;
+
+				try
+				{
+					DirectedGraph->shortPath(start_vertex , end_vertex , true) ;
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
 			}
 		}
 
@@ -537,9 +608,16 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cout << "  Enter weight: ";
 				std::cin >> weight;
 
-				DirectedGraph->insert(input1, input2, weight);
+				try
+				{
+					DirectedGraph->insert(input1, input2, weight);
+					std::cout << "  Element was inserted. " << " \n\n ";
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
 
-				std::cout << "  Element was inserted. " << " \n\n ";
 			}
 		}
 
@@ -555,9 +633,16 @@ void Menu_Program::Dijkstra_Algorithm()
 				std::cout << "  Enter vertex to be deleted: ";
 				std::cin >> vertex;
 
-				DirectedGraph->del(vertex);
+				try
+				{
+					DirectedGraph->del(vertex);
+				}
+				catch (const invalid_argument& e)
+				{
+					cerr << e.what() << endl;
+				}
 				
-				std::cout << "Vertex " << vertex << " was deleted and connections were updated. " << " \n\n";
+				//std::cout << "Vertex " << vertex << " was deleted and connections were updated. " << " \n\n";
 				}	
 		}
 		else if (input == 16)
@@ -570,6 +655,17 @@ void Menu_Program::Dijkstra_Algorithm()
 			Clear();
 			DirectedGraph->DisplayAdjacencyList() ;
 			if(DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+		}
+		else if (input == 18)
+		{
+ 			Clear() ;
+ 			// std::cout << DirectedGraph->checker("A" , "F" , false) << " \n\n" ;
+ 			if (DirectedGraph->checker("A" , "F" , false) == 3)
+ 			{
+ 			std::cout << " I AM WORKING AND I DON'T KNOW WHY. \n\n" ;
+ 			}
+ 			else std::cout << " I AM NOT WORKING AND I DON'T KNOW WHY. \n\n" ;
+ 			
 		}
 		else
 		{

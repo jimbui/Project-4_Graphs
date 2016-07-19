@@ -29,26 +29,27 @@ private:
 	template<class U> friend class Graph;
 	template<class U> friend class DirGraph;
 
-public:
-	std::string name = " " ;
+	std::string name;
 
-	Vertex() :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), data(0), edgePointer(nullptr)
+public:
+
+	Vertex() :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), data(0), edgePointer(nullptr), name(" ")
 	{
 		adjacencyList = new SLinkedList<Edge*>();
 	}
 
-	Vertex(const T& data) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(nullptr)
+	Vertex(const T& data) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(nullptr), name(" ")
 	{
 		this->data = data;
 		adjacencyList = new SLinkedList<Edge*>();
 	}
 
-	Vertex(const T& data, const string& name) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(nullptr)
+	Vertex(const T& data, const string& name) :visited(false), parent(0), cheapestConnection(6.66 * pow(10, 66)), edgePointer(nullptr), name(" ")
 	{
 
 	}
 
-	Vertex(const T& data, const double& cheapestConnection) :visited(false), parent(0), edgePointer(nullptr)
+	Vertex(const T& data, const double& cheapestConnection) :visited(false), parent(0), edgePointer(nullptr), name(" ")
 	{
 		this->data = data;
 		this->cheapestConnection = cheapestConnection;

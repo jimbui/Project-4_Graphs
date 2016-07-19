@@ -17,7 +17,7 @@ using namespace std;
 
 template<class T> class Graph
 {
-private:
+public:
 	HashTable<string, Vertex<T>*>* vertices;
 	int sz;
 	int edgeCount;
@@ -514,6 +514,27 @@ public:
 		}
 		else
 			cout << "Unable to open file";
+	}
+
+	void BuildGraphNew()
+	{
+		vertices->insert("A", new Vertex<T>(1)) ;
+		vertices->insert("B", new Vertex<T>(2)) ;
+		vertices->insert("C", new Vertex<T>(3)) ;
+		vertices->insert("D", new Vertex<T>(4)) ;
+		vertices->insert("E", new Vertex<T>(5)) ;
+		vertices->insert("F", new Vertex<T>(6)) ;
+
+		insert("A", "B", 1);
+		insert("A", "C", 4);
+		insert("B", "C", 1);
+		insert("B", "D", 1);
+		insert("B", "E", 2);
+		insert("C", "E", 3);
+		insert("D", "F", 1);
+		insert("E", "D", 3);
+		insert("E", "F", 2);
+		insert("F" , "A" , 99) ;
 	}
 
 	void clear()  // O(n)

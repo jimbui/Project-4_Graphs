@@ -59,123 +59,477 @@ Typing in 1 and hitting enter on this menu will give the user access to all of t
 
 
 
-int checker(string u , string v , bool path) // implementing djikstra's algorithm.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void Menu_Program::Dijkstra_Algorithm()
+{
+	int input = 0;
+	DirGraph<double>* DirectedGraph = new DirGraph<double>(23);
+
+	while (true)
 	{
-		clear() ;
-		BuildGraphNew() ;
-		if (sz > 0) // check to see if the graph is empty or not.
+		std::cout << "  Dijkstra Algorithm Menu" << std::endl << std::endl ;
+		std::cout << "    1.  Create graph." << std::endl ; // what is the difference betweent this and 11?
+		std::cout << "    2.  Check if graph is empty." << std::endl ;
+		std::cout << "    3.  Returns the indegree of the vertex inputed." << std::endl ;
+		std::cout << "    4.  Returns the outdegree of the vertex inputed." << std::endl ;
+		std::cout << "    5.  Returns the number of edges in the graph." << std::endl ;
+		std::cout << "    6.  Returns the weight of the edge connecting two vertices." << std::endl ;
+		std::cout << "    7.  Performs DFS traversal starting on vertex inputed." << std::endl ;
+		std::cout << "    8.  Performs BFS traversal starting on vertex inputed." << std::endl ;
+		std::cout << "    9.  Returns shortest path between two vertices." << std::endl ;
+		std::cout << "    10. Returns shortest distance between two vertices." << std::endl ;
+		std::cout << "    11. Create graph from text file." << std::endl ; // what is the difference betweent this and 1?
+		std::cout << "    12. Clear graph." << std::endl ;
+		std::cout << "    13. Reset graph." << std::endl ;
+		std::cout << "    14. Inset vertices into graph." << std::endl ;
+		std::cout << "    15. Delete item from graph." << std::endl ;
+		std::cout << "    16. Go back." << std::endl << std::endl ;
+
+		std::cout << "  ";
+		std::cin >> input; std::cin.clear(); std::cin.ignore();
+
+		if (input == 1) // this does nothing.
 		{
-			Vertex<T>* current ;
+			Clear() ;
+			std::cout << "  The graph has been created. " << " \n\n" ;
+		}
 
-			try // see if nodes exist.
-			{
-				current = vertices->search(v) ;
-				current = vertices->search(u) ; // current is now the starting node.
-			}
+		else if (input == 2)
+		{
+			Clear() ;
 
-			catch (const underflow_error& e) // if nodes do not exist.
-			{
-				std::cout << "  The node(s) do(es) not exist. \n\n" ;
-				return 0 ; // exit function.
-			}
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else std::cout << "  The graph is not empty " << " \n\n" ;
+		}
 
-			// the start node is now initialized.
+		else if (input == 3)
+		{
+			Clear() ;
 
-			djikstras_initialize() ; // makes all nodes unvisited and infinity distance away.
-			current->cheapestConnection = 0 ; // the starting node willk have a distance of zero from itself.
-			current->name = u ;
-			MaxHeapTree<std::string> edge_weight_tree(sz) ; // this will store nodes by key value , with smallest at the top.
-			MaxHeapTree<std::string> visit_tree(sz) ; // these are the nodes to visit.
+			string vertex;
 
-			// go to current node (which starts as first node in the beginning).  fill tree with adjacency list , update 
-			// distance , and set them to visited.  set current to visited.  set current to least value in heap tree.  repeat 
-			// until the heap tree is empty.
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else {
+				std::cout << "  Input a vertex: " ;
+				std::cin >> vertex;
+				std::cout << "  In degree of vertex " << vertex << ": " << DirectedGraph->indegree(vertex) << " \n\n";
+				}
+		}
 
-			bool flag = true ;
+		else if (input == 4)
+		{
+			Clear() ;
 
-			while(flag == true)
-			{
-				// std::cout << "\nthis loop? \n" ;
-				Node<Edge*>* edgePtr = current->adjacencyList->head ; // finds the first value in the adjacency list.
+			string vertex;
 
-				while (edgePtr != NULL) // fills the max heap tree with edges from node , with lowest edge as the max.
-				{   
-					edge_weight_tree.insert((double)1 / (double)edgePtr->data->GetWeight() , edgePtr->data->GetDestination() , edgePtr->data->GetWeight()) ;
-					std::cout << "\n  inserting: " << edgePtr->data->GetDestination() << " \n" ;
-					// previous line inserts the node and edge to the heap tree.  since this is technically a max heap tree ,
-					// we use the inverse value as a key to create a "min" heap tree.
-					edgePtr = edgePtr->next ; // go to next value.
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else {
+				std::cout << "  Input a vertex: " ;
+				std::cin >> vertex;
+				std::cout << "  Out degree of vertex " << vertex << ": " << DirectedGraph->outdegree(vertex) << " \n\n";
+				}
+		}
+
+		else if (input == 5)
+		{
+			Clear() ;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else std::cout << "  The number of edges in the graph are: " << DirectedGraph->EdgeCount() << " \n\n" ;
+
+		}
+
+		else if (input == 6)
+		{
+			Clear() ;
+			
+			string vertex1;
+			string vertex2;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else {
+				std::cout << "  Enter first vertex: ";
+				std::cin >> vertex1;
+				std::cout << "  Enter second vertex: ";
+				std::cin >> vertex2;
+
+				std::cout << "  The weight of the edge between vetices " << vertex1 << " and " << vertex2 << " is: " 
+					<< DirectedGraph->adjacent(vertex1, vertex2) << " \n\n";
+				}
+		}
+
+		else if (input == 7)
+		{
+			Clear() ;
+
+			string vertex;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else {
+				std::cout << "  Input a vertex:  " ;
+				std::cin >> vertex;
+				Clear() ;
+
+				std::cout << "  DFS Traversal: " << " \n\n" ;
+				DirectedGraph->DFS(vertex);
+				DirectedGraph->reset() ;
+				std::cout << "\n" ;
 				}
 
-				current->visited = true ; 
-				edge_weight_tree.display_tree() ;
+		}
 
-				// now visit each node in the heap tree by distance , and update the distance.  add new nodes as necessary.
+		else if (input == 8)
+		{
+			Clear() ;
 
-				while (!edge_weight_tree.empty()) // while this tree still has elements.
-				{
-					int weight_temp = edge_weight_tree.return_weight() ; // weight of the first item in the heap.
-					string name_temp = edge_weight_tree.delMax() ; // deletes first item and stores the name.
-					Vertex<T>* next = vertices->search(name_temp) ; // goes to node that was just deleted.
-					next->name = name_temp ;
+			string vertex;
 
-					if (current->cheapestConnection + weight_temp < next->cheapestConnection) // if the newly calculated distance is smaller.
-					{   // also update the parent for tracking purposes.
-						// std::cout << "\ncurrent->GetData() = " << current->GetData() << " \n" ;
-						std::cout << "next->GetData() = " << next->GetData() << " \n" ;
-						// std::cout << current->cheapestConnection << " " << weight_temp << " < " << next->cheapestConnection << "   " << current->cheapestConnection + weight_temp << " \n\n" ;
-						next->cheapestConnection = current->cheapestConnection + weight_temp ; // set new shortest distance.
-						next->parent = current ;
-					}
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
 
-					if (next->visited != true) // if the next node has yet to be visited , throw it into the heap tree.
-					{
-						std::cout << "\n  inserting: " << name_temp << " \n" ;
-						visit_tree.insert((double)1 / (double)next->cheapestConnection , name_temp , next->cheapestConnection) ;
-						next->visited = true ; // don't want to add the same node multiple times.
-					}
-				}
-
-				// edge_weight_tree.clear() ;
-
-				if (visit_tree.empty()) 
-				{
-					flag = false ;
-				}
-
-				else 
-				{
-					current = vertices->search(visit_tree.getMax()) ;
-					visit_tree.delMax() ;
-				}
-			}
-
-			current  = vertices->search(v) ;
-			// djikstras_display() ;
-			for (int i = 0 ; i < 200 ; i++) std::cout << "\n\n" ;
-			// djikstras_display() ;
-
-			if (path == false) 
+			else 
 			{
-				int i = current->cheapestConnection ;
-				clear() ;
-				return i ;
-			}
-
-			else if (path == true) // this is for path retrieval.
-			{
-				std::cout << "\n  Shortest path: " ;
-
-				while(current != nullptr)
-				{	
-					std::cout << current->name << " <- " ;
-					current = current->parent ;
-				}
-
-				std::cout << "START \n\n" ;
-				return 0 ;
+				std::cout << "  Input a vertex:  " ;
+				std::cin >> vertex;
+				Clear() ;
+				std::cout << "  BFS Traversal: " << " \n\n" ;
+				DirectedGraph->BFS(vertex);
+				DirectedGraph->reset() ;
+				std::cout << "\n" ;
 			}
 		}
 
-		else std::cout << "  The graph is empty. \n" ; // if the graph is empty.
+		else if (input == 9)
+		{
+			Clear() ;
+
+			string start_vertex ;
+			string end_vertex ;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+
+			else 
+			{
+				std::cout << "  Enter starting vertex: ";
+				std::cin >> start_vertex;
+				Clear() ;
+				std::cout << "  Enter ending vertex: ";
+				std::cin >> end_vertex;
+				Clear() ;
+				DirectedGraph->shortPath(start_vertex , end_vertex) ;
+			}
+		}
+
+		else if (input == 10)
+		{
+			Clear() ;
+		}
+
+
+		else if (input == 11) // can only build if it is empty.
+		{
+			Clear() ;
+
+			if (DirectedGraph->empty()) 
+			{
+				DirectedGraph->BuildGraphNew();
+				std::cout << "  The graph was created from the text file. \n\n" ;
+			}
+			else std::cout << "  The graph was already created. " << " \n\n" ;
+		}
+
+		else if (input == 12)
+		{
+			Clear() ;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else {
+
+				DirectedGraph->clear();
+				std::cout << "  The graph was cleared. " << " \n\n" ;
+
+				}
+		}
+
+		else if (input == 13)
+		{
+			Clear() ;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else {
+				
+				DirectedGraph->reset();
+				std::cout << "  The graph was reset. " << " \n\n" ;
+
+				}
+		}
+		
+		else if (input == 14)
+		{
+			Clear() ;
+
+			string input1;
+			string input2;
+			double weight;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else {
+				
+				std::cout << "  Enter first edge: ";
+				std::cin >> input1;
+				std::cout << "  Enter second edge: ";
+				std::cin >> input2;
+				std::cout << "  Enter weight: ";
+				std::cin >> weight;
+
+				DirectedGraph->insert(input1, input2, weight);
+
+				std::cout << "  Element was inserted. " << " \n\n ";
+			}
+		}
+
+		else if (input == 15)
+		{
+			Clear() ;
+
+			string vertex;
+
+			if (DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+			else {
+				
+				std::cout << "  Enter vertex to be deleted: ";
+				std::cin >> vertex;
+
+				DirectedGraph->del(vertex);
+				
+				std::cout << "Vertex " << vertex << " was deleted and connections were updated. " << " \n\n";
+				}	
+		}
+		else if (input == 16)
+		{
+			Clear();
+			break;
+		}
+		else if (input == 17)
+		{
+			Clear();
+			DirectedGraph->DisplayAdjacencyList() ;
+			if(DirectedGraph->empty()) std::cout << "  The graph is empty. \n\n" ;
+		}
+		else
+		{
+			Clear();
+			std::cout << std::endl << "  Invalid input." << std::endl << std::endl;
+		}
+	}
+}
+
+
+
+void shortPath(string u , string v)
+	{
+		if (sz > 0)
+		{
+			MaxHeapTree<std::string> why_is_the_rum_gone(sz) ; // this is the tree compare edge weights , will be reset many times.
+			MaxHeapTree<std::string> no_really_why(sz) ; // this is the path of least resistance.
+			int i = 0 ;
+
+			try
+			{
+				Vertex<T>* current = vertices->search(v) ; // just to see if this exists.
+				current = vertices->search(u) ; // start at this node.
+				// Node<Edge*>* edgePtr = current->adjacencyList->head ; // get adjacency list.
+				djikstras() ; // sets distance to over 9000 (infinity).
+				current->cheapestConnection = 0 ; // except this one , this be zed.
+				no_really_why.insert(0 , u , 0) ;
+				bool flag = true ;
+
+				while (!no_really_why.empty())
+				{
+					std::cout << "\nTHIS IS FROM: " << current->GetData() << " XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx\n\n" ;
+					Node<Edge*>* edgePtr = current->adjacencyList->head ;
+					// std::cout << "1 \n\n" ;
+
+					while (edgePtr != NULL) // fills the max heap tree with edges from first node , with lowest edge as the max.
+					{
+						int i = edgePtr->data->GetWeight() ;
+						cout << edgePtr->data->GetDestination() << " (" << edgePtr->data->GetWeight() << ") --> NULL \n";
+						why_is_the_rum_gone.insert((double)1 / (double)edgePtr->data->GetWeight() , edgePtr->data->GetDestination() , i) ;
+						// why_is_the_rum_gone.insert(key_in , data_in) ;
+						
+						// if (current->cheapestConnection + )
+						edgePtr = edgePtr->next ;
+					}
+
+					why_is_the_rum_gone.display_tree() ;
+
+					while (!why_is_the_rum_gone.empty())
+					{
+						int weight_temp = why_is_the_rum_gone.return_weight() ;
+						std::cout << "return_weight(): " << return_weight() ;
+						string name_temp = why_is_the_rum_gone.delMax() ;
+						Vertex<T>* next = vertices->search(name_temp) ;
+
+						if (current->cheapestConnection + weight_temp < next->cheapestConnection)
+						{
+							std::cout << "\ncurrent->GetData() = " << current->GetData() << " \n" ;
+							std::cout << "next->GetData() = " << next->GetData() << " \n" ;
+							std::cout << current->cheapestConnection << " " << weight_temp << " < " << next->cheapestConnection << "   " << current->cheapestConnection + weight_temp << " \n\n" ;
+							next->cheapestConnection = current->cheapestConnection + weight_temp ;
+						}
+
+						if (next->visited != true) 
+						{
+							// std::cout << "2: " << (double)1 / (double)next->cheapestConnection << "   " << name_temp << "   " << next->cheapestConnection << " \n\n" ;
+							no_really_why.insert((double)1 / (double)next->cheapestConnection , name_temp , next->cheapestConnection) ;
+							next->visited = true ;
+							std::cout << "INSERTED " << name_temp << "\n" ;
+						}
+					}
+
+					current->visited = true ;
+					// no_really_why.display_tree() ;
+
+
+					// if (flag == true)
+					// {
+					// 	flag = false ;
+					// 	no_really_why.delMax() ;
+					// 	no_really_why.delMax() ;
+					// }
+
+					// no_really_why.display_tree() ;
+					current = vertices->search(no_really_why.getMax()) ;
+					no_really_why.delMax() ;
+				}
+
+				djikstras_display() ;
+
+				current  = vertices->search(v) ;
+				std::cout << "  Distance to " << v << " is " << current->cheapestConnection << ". \n\n" ;
+				// djikstras_display() ;
+
+				// why_is_the_rum_gone.display_tree() ;
+				// std::cout << why_is_the_rum_gone.delMax() << "\n" ;
+				// why_is_the_rum_gone.display_tree() ;
+				std::cout << "\n" ;
+
+				// std::cout << "  double: " << (double)1 / (double)64 << " \n\n" ;
+
+
+				// std::cout << "this is getdata(): " << start->GetData() << "\n\n" ; // this gives the value of the node... which does literally nothing.
+				// std::cout << "this is start->data: " << start->data << " \n\n" ;
+				// ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
+				// no_really_why.insert()
+				// why_is_the_rum_gone.insert(key_in , data_in) ;
+				reset() ;
+			}
+
+			catch (const underflow_error& e)
+			{
+				// std::cout << "  The vertex or vertices do not exist. \n\n" ;
+				Vertex<T>* current  = vertices->search(v) ;
+				std::cout << "  Distance to " << v << " is " << current->cheapestConnection << ". \n\n" ;
+				djikstras_display() ;
+			}
+		}
+
+		else std::cout << "  The graph is empty. \n" ;
+
+		/*if (sz > 0) // How to get all of the vertices in the graph...
+		{
+			for (int i = 0; i < vertices->arraySize; i++)
+			{
+				ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
+
+				while (ptr != nullptr)  // Checks each item in the chained hash table
+				{
+					string vName = ptr->DataKey();
+					Vertex<T>* current = ptr->Data();
+
+					cout << "  |" << vName << ":  " << current->GetData() << "| --> ";
+
+					Node<Edge*>* edgePtr = current->adjacencyList->head;
+
+					while (edgePtr != nullptr)
+					{
+						cout << edgePtr->data->GetDestination() << " (" << edgePtr->data->GetWeight() << ") --> ";
+						edgePtr = edgePtr->next;
+					}
+
+					cout << "NULL" << endl; // marks the end of one set of edges.
+
+					ptr = ptr->GetNext();
+				}
+			}
+		}
+		else
+			cout << "The graph is empty." << endl;
+
+		cout << endl;*/
+	}
+	
+	
+	
+	void djikstras()  // O(n)
+	{
+		for (int i = 0; i < vertices->arraySize; i++)
+		{
+			ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
+
+			while (ptr != nullptr)  // Checks each item in the chained hash table
+			{
+				Vertex<T>* current = ptr->Data();
+
+				current->visited = false;
+				current->cheapestConnection = 9001 * 9001 ; // over 9000.
+				ptr = ptr->GetNext() ;
+			}
+		}
+	}
+
+	void djikstras_display()  // O(n)
+	{
+		for (int i = 0; i < vertices->arraySize; i++)
+		{
+			ChainNode<string, Vertex<T>*>* ptr = vertices->bucket[i].GetHead();
+
+			while (ptr != nullptr)  // Checks each item in the chained hash table
+			{
+				Vertex<T>* current = ptr->Data();
+				std::cout << "  " << current->data << " = " << current->cheapestConnection << "\n" ;
+				ptr = ptr->GetNext() ;
+			}
+		}
 	}
